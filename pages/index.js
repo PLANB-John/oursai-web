@@ -10,23 +10,23 @@ export default function EeumStyleMain() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] font-sans">
         
-{/* --- 상단 헤더 섹션 (크고 굵게, 반듯하게 수정됨) --- */}
+{/* --- 상단 헤더 섹션 (별 효과, 띄어쓰기, 버튼 스타일 수정) --- */}
         <header className="px-6 py-12 text-center">
-          <div className="flex flex-col items-center gap-4">
-            {/* 메인 로고: 폰트 크기 확대(5xl), 이탤릭 제거, 가장 굵은 폰트(black) 유지 */}
-            <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 flex items-center gap-3">
-              {/* 별 아이콘 크기도 텍스트에 맞춰 확대 (4xl) */}
-              <span className="text-purple-400 animate-pulse text-4xl">✦</span>
-              우리사이
-              <span className="text-pink-400 animate-pulse text-4xl">✦</span>
+          <div className="flex flex-col items-center gap-5">
+            {/* 메인 로고: '우리 사이' 띄어쓰기 및 별 사이즈/이펙트 수정 */}
+            <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center gap-3">
+              {/* 별 아이콘: 2단계 작아짐(2xl), 빤짝이며 커졌다 작아지는 효과(animate-pulse) */}
+              <span className="text-purple-400 animate-pulse text-2xl mb-1">✦</span>
+              우리 사이
+              <span className="text-pink-400 animate-pulse text-2xl mb-1">✦</span>
             </h1>
             
-            {/* 서비스 소개 버튼 (변경 없음) */}
+            {/* 서비스 소개: 원형 틀 제거, 연한 그레이 색상(slate-400) 적용 */}
             <a 
               href="/intro" 
-              className="text-[11px] text-purple-400 font-bold border border-purple-100 px-3 py-1 rounded-full hover:bg-purple-50 transition-colors"
+              className="text-[12px] text-slate-400 font-bold flex items-center gap-1 hover:text-purple-400 transition-colors"
             >
-              서비스 소개 <span className="text-[10px] opacity-70">→</span>
+              서비스 소개 <span className="text-[10px] opacity-60">→</span>
             </a>
           </div>
         </header>
