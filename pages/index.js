@@ -10,13 +10,24 @@ export default function EeumStyleMain() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] font-sans">
         
-        {/* --- 상단 헤더 --- */}
-        <header className="px-6 py-8 text-center">
-          <div className="flex justify-center items-center gap-1 mb-2">
-            <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 italic">Sai</h1>
-            <span className="text-[10px] text-purple-300 font-bold border border-purple-100 px-2 py-0.5 rounded-full">서비스 소개 →</span>
+{/* --- 상단 헤더 섹션 --- */}
+        <header className="px-6 py-12 text-center">
+          <div className="flex flex-col items-center gap-3">
+            {/* 메인 로고 영역 */}
+            <h1 className="text-3xl font-black text-slate-800 tracking-tight flex items-center gap-1">
+              <span className="text-yellow-400 animate-pulse">✨</span>
+              우리사이
+              <span className="text-yellow-400 animate-pulse">✨</span>
+            </h1>
+            
+            {/* 서비스 소개 링크 */}
+            <a 
+              href="/intro" 
+              className="text-[12px] text-slate-400 font-bold flex items-center gap-1 hover:text-purple-400 transition-colors bg-slate-50 px-3 py-1 rounded-full border border-slate-100"
+            >
+              서비스 소개 <span className="text-[10px] text-slate-300">→</span>
+            </a>
           </div>
-          <p className="text-slate-500 font-bold text-lg tracking-tight">우리사이, 사주로 잇다</p>
         </header>
 
         {/* --- 중앙 인연 네트워크 (이음 핵심 비주얼) --- */}
