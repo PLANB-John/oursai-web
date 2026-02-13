@@ -10,17 +10,18 @@ export default function EeumStyleMain() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] font-sans">
         
-{/* --- 상단 헤더 섹션 (오리지널 컬러 + 우리사이) --- */}
+{/* --- 상단 헤더 섹션 (크고 굵게, 반듯하게 수정됨) --- */}
         <header className="px-6 py-12 text-center">
           <div className="flex flex-col items-center gap-4">
-            {/* 메인 로고: 첫 번째 코드의 그라데이션과 폰트 스타일 적용 */}
-            <h1 className="text-4xl font-black italic text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 flex items-center gap-2">
-              <span className="text-purple-400 animate-pulse not-italic text-3xl">✦</span>
+            {/* 메인 로고: 폰트 크기 확대(5xl), 이탤릭 제거, 가장 굵은 폰트(black) 유지 */}
+            <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 flex items-center gap-3">
+              {/* 별 아이콘 크기도 텍스트에 맞춰 확대 (4xl) */}
+              <span className="text-purple-400 animate-pulse text-4xl">✦</span>
               우리사이
-              <span className="text-pink-400 animate-pulse not-italic text-3xl">✦</span>
+              <span className="text-pink-400 animate-pulse text-4xl">✦</span>
             </h1>
             
-            {/* 서비스 소개: 이전의 깔끔한 뱃지 스타일 적용 */}
+            {/* 서비스 소개 버튼 (변경 없음) */}
             <a 
               href="/intro" 
               className="text-[11px] text-purple-400 font-bold border border-purple-100 px-3 py-1 rounded-full hover:bg-purple-50 transition-colors"
