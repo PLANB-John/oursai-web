@@ -10,22 +10,22 @@ export default function EeumStyleMain() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] font-sans">
         
-{/* --- 상단 헤더 섹션 (이음 스타일 99% 싱크로율) --- */}
+{/* --- 상단 헤더 섹션 (오리지널 컬러 + 우리사이) --- */}
         <header className="px-6 py-12 text-center">
-          <div className="flex flex-col items-center gap-3">
-            {/* 메인 로고 영역: '이음' 스타일 별 모양(✦)과 진한 골드 색상 적용 */}
-            <h1 className="text-3xl font-black text-slate-800 tracking-tight flex items-center gap-2">
-              <span className="text-yellow-500 animate-pulse text-2xl">✦</span>
+          <div className="flex flex-col items-center gap-4">
+            {/* 메인 로고: 첫 번째 코드의 그라데이션과 폰트 스타일 적용 */}
+            <h1 className="text-4xl font-black italic text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 flex items-center gap-2">
+              <span className="text-purple-400 animate-pulse not-italic text-3xl">✦</span>
               우리사이
-              <span className="text-yellow-500 animate-pulse text-2xl">✦</span>
+              <span className="text-pink-400 animate-pulse not-italic text-3xl">✦</span>
             </h1>
             
-            {/* 서비스 소개 링크 */}
+            {/* 서비스 소개: 이전의 깔끔한 뱃지 스타일 적용 */}
             <a 
               href="/intro" 
-              className="text-[12px] text-slate-400 font-bold flex items-center gap-1 hover:text-purple-400 transition-colors bg-slate-50 px-3 py-1 rounded-full border border-slate-100"
+              className="text-[11px] text-purple-400 font-bold border border-purple-100 px-3 py-1 rounded-full hover:bg-purple-50 transition-colors"
             >
-              서비스 소개 <span className="text-[10px] text-slate-300">→</span>
+              서비스 소개 <span className="text-[10px] opacity-70">→</span>
             </a>
           </div>
         </header>
