@@ -10,17 +10,17 @@ export default function EeumStyleMain() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] font-sans">
         
-{/* --- 상단 헤더 섹션 (이음 스타일 최종) --- */}
+{/* --- 상단 헤더 섹션 (이음 스타일 99% 싱크로율) --- */}
         <header className="px-6 py-12 text-center">
           <div className="flex flex-col items-center gap-3">
-            {/* 메인 로고 영역: 크기, 색상, 반짝임 효과 적용 */}
-            <h1 className="text-3xl font-black text-slate-800 tracking-tight flex items-center gap-1">
-              <span className="text-yellow-400 animate-pulse">✨</span>
+            {/* 메인 로고 영역: '이음' 스타일 별 모양(✦)과 진한 골드 색상 적용 */}
+            <h1 className="text-3xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+              <span className="text-yellow-500 animate-pulse text-2xl">✦</span>
               우리사이
-              <span className="text-yellow-400 animate-pulse">✨</span>
+              <span className="text-yellow-500 animate-pulse text-2xl">✦</span>
             </h1>
             
-            {/* 서비스 소개 링크: 뱃지 스타일 및 호버 효과 적용 */}
+            {/* 서비스 소개 링크 */}
             <a 
               href="/intro" 
               className="text-[12px] text-slate-400 font-bold flex items-center gap-1 hover:text-purple-400 transition-colors bg-slate-50 px-3 py-1 rounded-full border border-slate-100"
@@ -29,7 +29,7 @@ export default function EeumStyleMain() {
             </a>
           </div>
         </header>
-  
+                
         {/* --- 중앙 인연 네트워크 (이음 핵심 비주얼) --- */}
         <section className="px-6 relative py-10">
           <div className="aspect-square bg-slate-50 rounded-[40px] border border-slate-100 relative flex items-center justify-center overflow-hidden shadow-inner">
