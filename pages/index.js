@@ -10,27 +10,31 @@ export default function EeumStyleMain() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] font-sans">
         
-{/* --- 상단 헤더 섹션 (별 효과, 띄어쓰기, 버튼 스타일 수정) --- */}
+{/* --- 상단 헤더 섹션 (폰트 굵기 수정 및 카피 문구 추가) --- */}
         <header className="px-6 py-12 text-center">
-          <div className="flex flex-col items-center gap-5">
-            {/* 메인 로고: '우리 사이' 띄어쓰기 및 별 사이즈/이펙트 수정 */}
+          <div className="flex flex-col items-center gap-4">
+            {/* 메인 로고 영역 */}
             <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center gap-3">
-              {/* 별 아이콘: 2단계 작아짐(2xl), 빤짝이며 커졌다 작아지는 효과(animate-pulse) */}
               <span className="text-purple-400 animate-pulse text-2xl mb-1">✦</span>
               우리 사이
               <span className="text-pink-400 animate-pulse text-2xl mb-1">✦</span>
             </h1>
             
-            {/* 서비스 소개: 원형 틀 제거, 연한 그레이 색상(slate-400) 적용 */}
+            {/* 서비스 소개: 폰트 굵기를 font-medium으로 얇게 조정 */}
             <a 
               href="/intro" 
-              className="text-[12px] text-slate-400 font-bold flex items-center gap-1 hover:text-purple-400 transition-colors"
+              className="text-[12px] text-slate-400 font-medium flex items-center gap-1 hover:text-purple-400 transition-colors"
             >
               서비스 소개 <span className="text-[10px] opacity-60">→</span>
             </a>
+
+            {/* 카피 문구: '이음' 스타일의 슬로건 추가 */}
+            <p className="text-slate-500 font-bold text-lg tracking-tight mt-2">
+              우리 사이, 사주로 잇다
+            </p>
           </div>
         </header>
-                
+              
         {/* --- 중앙 인연 네트워크 (이음 핵심 비주얼) --- */}
         <section className="px-6 relative py-10">
           <div className="aspect-square bg-slate-50 rounded-[40px] border border-slate-100 relative flex items-center justify-center overflow-hidden shadow-inner">
