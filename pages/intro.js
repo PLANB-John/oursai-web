@@ -3,12 +3,12 @@ import Head from 'next/head';
 
 export default function Intro() {
   return (
-    <div className="min-h-screen bg-slate-100 flex justify-center items-start sm:py-10">
+    <div className="min-h-screen bg-slate-100 flex justify-center items-start sm:py-10 font-sans">
       <Head>
         <title>서비스 소개 | 우리사이 (oursai.kr)</title>
       </Head>
 
-      <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] font-sans pb-20">
+      <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-20">
         
         {/* --- 상단 네비게이션 --- */}
         <div className="px-6 py-6 border-b border-slate-50">
@@ -18,87 +18,68 @@ export default function Intro() {
         </div>
 
         <main className="px-8 py-12 space-y-16">
-          {/* 타이틀 */}
           <section>
             <h1 className="text-3xl font-black text-slate-800 mb-4 tracking-tight">서비스 소개</h1>
           </section>
 
-          {/* 우리사이란? */}
-          <section className="space-y-4">
-            <h2 className="text-xl font-bold text-slate-800">우리사이란?</h2>
-            <div className="text-slate-500 text-sm leading-7 space-y-4">
-              <p>우리사이는 사주 일주를 기반으로 그룹 내 구성원들의 궁합을 분석해주는 서비스입니다. 친구, 동료, 가족 등 모임 구성원들이 서로 얼마나 잘 맞는지 재미있게 확인해볼 수 있습니다.</p>
-              <p>'우리사이'라는 이름은 사람과 사람 사이의 인연을 잇는다는 의미를 담고 있습니다. 단순한 궁합 결과를 넘어, 서로를 더 깊이 이해하고 관계를 돈독히 하는 계기가 되길 바라는 마음으로 만들었습니다.</p>
-            </div>
-          </section>
-
-          {/* 만든 이유 */}
-          <section className="space-y-4">
-            <h2 className="text-xl font-bold text-slate-800">우리사이를 만든 이유</h2>
-            <div className="text-slate-500 text-sm leading-7">
-              <p>"우리 진짜 잘 맞는 걸까?" 라는 가벼운 질문에서 시작되었습니다. 기존의 궁합 서비스들은 대부분 1:1 결과만 제공하거나, 복잡한 사주 지식을 요구했습니다.</p>
-              <p>그래서 누구나 쉽게, 그룹 전체의 궁합을 한눈에 볼 수 있는 서비스를 만들고 싶었습니다. 모임에서 아이스브레이킹 도구로 활용하거나, 팀 빌딩에서 재미있는 대화 주제로 사용될 수 있도록 기획했습니다.</p>
-            </div>
-          </section>
-
-          {/* 서비스 특징 */}
-          <section className="space-y-4">
+          {/* 서비스 특징 섹션: 이미지 내용 100% 반영 */}
+          <section className="space-y-6">
             <h2 className="text-xl font-bold text-slate-800">서비스 특징</h2>
-            <ul className="text-slate-500 text-sm leading-8 list-disc pl-5">
-              <li><span className="font-bold text-slate-700">완전 무료:</span> 모든 기능을 무료로 이용할 수 있습니다.</li>
-              <li><span className="font-bold text-slate-700">회원가입 불필요:</span> 번거로운 가입 없이 바로 사용 가능합니다.</li>
-              <li><span className="font-bold text-slate-700">그룹 궁합 분석:</span> 최대 12명까지의 그룹 전체 궁합을 분석합니다.</li>
-              <li><span className="font-bold text-slate-700">쉬운 해석:</span> 전통적인 사주 이론을 현대적인 언어로 풀어서 설명합니다.</li>
-              <li><span className="font-bold text-slate-700">프라이버시 보호:</span> 입력된 정보는 분석 즉시 폐기하며 저장하지 않습니다.</li>
+            <ul className="text-slate-500 text-sm leading-7 space-y-5">
+              <li>
+                <span className="font-bold text-slate-700 block mb-1">· 완전 무료:</span>
+                모든 기능을 무료로 이용할 수 있습니다. 숨겨진 유료 기능이나 결제 유도가 없습니다.
+              </li>
+              <li>
+                <span className="font-bold text-slate-700 block mb-1">· 회원가입 불필요:</span>
+                번거로운 회원가입 없이 바로 사용할 수 있습니다. 링크 하나로 친구들을 초대하고 함께 결과를 확인하세요.
+              </li>
+              <li>
+                <span className="font-bold text-slate-700 block mb-1">· 그룹 궁합 분석:</span>
+                1:1 궁합이 아닌, 최대 12명까지의 그룹 전체 궁합을 시각적으로 분석합니다. 누가 누구와 가장 잘 맞는지 한눈에 파악할 수 있습니다.
+              </li>
+              <li>
+                <span className="font-bold text-slate-700 block mb-1">· 나와 궁합 분석:</span>
+                내가 방장이 되어 친구와의 궁합을 순위로 확인할 수 있습니다. 친구는 나와의 궁합 결과와 자신의 순위를 볼 수 있고, 전체 순위표는 방장만 확인할 수 있어요.
+              </li>
+              <li>
+                <span className="font-bold text-slate-700 block mb-1">· 쉬운 해석:</span>
+                전통적인 사주 이론을 누구나 이해할 수 있는 현대적인 언어로 풀어서 설명해드립니다.
+              </li>
+              <li>
+                <span className="font-bold text-slate-700 block mb-1">· 프라이버시 보호:</span>
+                입력된 개인정보(이름, 생년월일, 성별 등)는 궁합 계산에만 사용되며, 제3자에게 판매하거나 마케팅 목적으로 활용하지 않습니다.
+              </li>
+              <li>
+                <span className="font-bold text-slate-700 block mb-1">· 오늘의 일진:</span>
+                매일 바뀌는 그룹 멤버들의 운세 순위를 확인할 수 있습니다.
+              </li>
+              <li>
+                <span className="font-bold text-slate-700 block mb-1">· 모임 관리:</span>
+                관리용 PIN을 설정하면 멤버 삭제, 모임 이름 변경, 모임 삭제 등을 직접 관리할 수 있습니다.
+              </li>
+              <li>
+                <span className="font-bold text-slate-700 block mb-1">· 사주 가이드:</span>
+                사주 초보 가이드부터 오행, 천간지지, 60일주, 띠별 궁합까지 다양한 학습 콘텐츠를 무료로 제공합니다.
+              </li>
             </ul>
           </section>
 
-          {/* 어떻게 작동하나요? */}
+          {/* 이하 섹션들 유지 */}
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-slate-800">어떻게 작동하나요?</h2>
-            <div className="bg-slate-50 p-6 rounded-3xl space-y-4 border border-slate-100">
-              <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-500 rounded-full flex items-center justify-center text-xs font-bold">1</span>
-                <p className="text-sm text-slate-600 font-medium">모임 방장이 방 이름을 정하고 정보를 입력합니다.</p>
-              </div>
-              <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-500 rounded-full flex items-center justify-center text-xs font-bold">2</span>
-                <p className="text-sm text-slate-600 font-medium">생성된 링크를 친구들에게 공유합니다.</p>
-              </div>
-              <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-500 rounded-full flex items-center justify-center text-xs font-bold">3</span>
-                <p className="text-sm text-slate-600 font-medium">구성원이 모이면 실시간으로 궁합 결과가 업데이트됩니다.</p>
-              </div>
-            </div>
-          </section>
-
-          {/* 왜 사주 일주인가요? */}
-          <section className="space-y-4">
-            <h2 className="text-xl font-bold text-slate-800">왜 사주 일주인가요?</h2>
             <div className="text-slate-500 text-sm leading-7">
-              <p>사주(四柱)는 태어난 연, 월, 일, 시를 네 개의 기둥으로 표현한 것입니다. 그 중 일주(日柱)는 태어난 '날'에 해당하는 간지로, 사주 명리학에서 개인의 본질적인 성향과 정체성을 나타내는 핵심 요소로 여겨집니다.</p>
-              <p>우리사이는 이러한 전통적인 사주 이론을 현대적으로 재해석하여, 누구나 쉽게 이해할 수 있는 방식으로 궁합 결과를 제공합니다.</p>
+              <p className="mb-4">모임 궁합:</p>
+              <ol className="list-decimal pl-5 space-y-2">
+                <li>모임 방장이 방 이름을 정하고 정보를 입력합니다.</li>
+                <li>생성된 링크를 친구들에게 공유합니다.</li>
+                <li>친구들이 정보를 입력하면 실시간으로 궁합이 업데이트됩니다.</li>
+              </ol>
             </div>
-          </section>
-
-          {/* 참고사항 */}
-          <section className="space-y-4">
-            <h2 className="text-xl font-bold text-slate-800 font-bold">참고사항</h2>
-            <ul className="text-slate-400 text-[12px] leading-6 list-disc pl-5">
-              <li>본 서비스는 재미와 친목 도모를 위한 엔터테인먼트 목적으로 제작되었습니다.</li>
-              <li>궁합 결과는 사주 원리만을 기반으로 한 단편적인 분석입니다.</li>
-              <li>전문적인 상담이나 중대한 결정의 근거로 사용하기에는 적합하지 않습니다.</li>
-            </ul>
-          </section>
-
-          {/* 연락처 */}
-          <section className="space-y-4 pt-10 border-t border-slate-50">
-            <h2 className="text-sm font-bold text-slate-800">연락처</h2>
-            <p className="text-xs text-slate-400 underline cursor-pointer hover:text-purple-400">hello@oursai.kr</p>
           </section>
         </main>
 
-        <footer className="px-8 py-10 bg-white text-center">
+        <footer className="px-8 py-10 bg-white text-center border-t border-slate-50">
           <p className="text-[10px] text-slate-300 font-medium italic">© 2026 oursai.kr | All Rights Reserved.</p>
         </footer>
       </div>
