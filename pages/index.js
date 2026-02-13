@@ -30,7 +30,7 @@ export default function EeumStyleMain() {
 
             {/* 카피 문구: '이음' 스타일의 슬로건 추가 */}
             <p className="text-slate-500 font-bold text-lg tracking-tight mt-2">
-              우리 사이, 사주로 잇다
+              우리 사이 운명일까?
             </p>
           </div>
         </header>
