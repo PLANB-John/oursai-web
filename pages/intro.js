@@ -28,7 +28,7 @@ export default function Intro() {
             <h2 className="text-[18px] font-black text-slate-800">우리 사이란?</h2>
             <div className="text-slate-500 text-[13px] leading-7 space-y-4">
               <p>
-                우리 사이는 사주 일주를 기반으로 사람들 사이의 관계 궁합을 분석해주는 서비스입니다. 친구, 동료, 가족 등 하나의 모임 안에서 구성원들이 서로 얼마나 잘 맞는지 재미있고 직관적으로 확인할 수 있도록 설계되었습니다. 단순히 두 사람만 비교하는 궁합을 넘어, 모임 전체를 대상으로 하는 N:N 궁합 분석을 제공하며 관계의 흐름을 한눈에 파악할 수 있습니다. 또한 나를 중심으로 여러 사람과의 궁합을 비교해 순위로 보여주는 ‘나와 궁합’ 기능을 통해, 어떤 사람과 특히 잘 맞는지 쉽게 확인할 수 있습니다.
+                우리 사이는 사주 일주를 기반으로 사람들 사이의 관계 궁합을 분석해주는 서비스입니다. 친구, 동료, 가족 등 하나의 모임 안에서 구성원들이 서로 얼마나 잘 맞는지 재미있고 직관적으로 확인할 수 있도록 설계되었습니다. 단순히 두 사람만 비교하는 궁합을 넘어, 모임 전체를 대상으로 하는 N:N 궁합 분석을 제공하며 관계의 흐름을 한눈에 파악할 수 있습니다. 또한 나를 중심으로 여러 사람과의 궁합을 비교해 순위로 보여주는 ‘나와 궁합’ 기능을 통해, 어떤 person과 특히 잘 맞는지 쉽게 확인할 수 있습니다.
               </p>
               <p>
                 이외에도 매일 달라지는 ‘오늘의 일진’으로 하루의 흐름을 가볍게 살펴볼 수 있고, 어렵게 느껴졌던 사주를 누구나 이해할 수 있도록 돕는 ‘사주 가이드’를 함께 제공합니다. 전문 지식이 없어도 자연스럽게 사주와 관계의 의미를 알아갈 수 있도록 구성했습니다. ‘우리 사이’라는 이름에는 사람과 사람 사이의 인연을 이어준다는 의미를 담았습니다. 결과를 단순한 좋고 나쁨의 판단으로 끝내기보다, 서로를 이해하는 계기와 대화의 시작점이 되기를 바라는 마음으로 만들어진 서비스입니다.
@@ -46,7 +46,7 @@ export default function Intro() {
             </div>
           </section>
 
-          {/* 4. 서비스 특징 (· 크기 확대 및 콜론 제거) */}
+          {/* 4. 서비스 특징 */}
           <section className="space-y-6">
             <h2 className="text-[18px] font-black text-slate-800">서비스 특징</h2>
             <ul className="text-slate-500 text-[13px] leading-7 space-y-5">
@@ -72,7 +72,49 @@ export default function Intro() {
             </ul>
           </section>
 
-          {/* 5. 연락처 및 출시 정보 */}
+          {/* 5. 어떻게 작동하나요? (복구됨) */}
+          <section className="space-y-8">
+            <h2 className="text-[18px] font-black text-slate-800">어떻게 작동하나요?</h2>
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <p className="text-[14px] font-bold text-slate-700">모임 궁합</p>
+                <ol className="text-slate-500 text-[13px] leading-7 list-decimal pl-5 space-y-2">
+                  <li>모임 방장이 방 이름을 정하고 정보를 입력합니다.</li>
+                  <li>생성된 링크를 친구들에게 공유합니다.</li>
+                  <li>친구들이 정보를 입력하면 실시간으로 궁합이 업데이트됩니다.</li>
+                </ol>
+              </div>
+              <div className="space-y-3">
+                <p className="text-[14px] font-bold text-slate-700">나와 궁합</p>
+                <ol className="text-slate-500 text-[13px] leading-7 list-decimal pl-5 space-y-2">
+                  <li>궁합방 만들기: 내 정보를 입력하고 방 이름과 PIN을 설정합니다.</li>
+                  <li>링크 공유하기: 친구들에게 공유하여 참여를 유도합니다.</li>
+                  <li>순위 확인하기: 방장만 PIN을 입력해 전체 순위를 확인합니다.</li>
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          {/* 6. 왜 사주 일주인가요? (복구됨) */}
+          <section className="space-y-5">
+            <h2 className="text-[18px] font-black text-slate-800">왜 사주 일주인가요?</h2>
+            <div className="text-slate-500 text-[13px] leading-7 space-y-4">
+              <p>사주(四柱)는 태어난 연, 월, 일, 시를 네 개의 기둥으로 표현한 것입니다. 그 중 일주(日柱)는 태어난 '날'에 해당하는 간지로, 사주 명리학에서 개인의 본질적인 성향과 정체성을 나타내는 핵심 요소입니다.</p>
+              <p>우리 사이는 이러한 전통적인 사주 이론을 현대적으로 재해석하여, 누구나 쉽게 이해할 수 있는 방식으로 궁합 결과를 제공합니다.</p>
+            </div>
+          </section>
+
+          {/* 7. 참고사항 (복구됨) */}
+          <section className="space-y-5">
+            <h2 className="text-[18px] font-black text-slate-800">참고사항</h2>
+            <ul className="text-slate-400 text-[12px] leading-6 list-disc pl-5 space-y-2">
+              <li>본 서비스는 재미와 친목 도모를 위한 엔터테인먼트 목적으로 제작되었습니다.</li>
+              <li>궁합 결과는 사주 일주만을 기반으로 한 간략화된 분석입니다. 실제 인간관계는 다양한 요소에 영향을 받습니다.</li>
+              <li>사주 명리학은 전통적인 학문이며 과학적으로 검증된 것은 아닙니다. 열린 마음으로 즐겨주세요.</li>
+            </ul>
+          </section>
+
+          {/* 8. 연락처 및 출시 정보 */}
           <section className="space-y-4 pt-10 border-t border-slate-50">
             <div className="space-y-1">
               <h2 className="text-[14px] font-bold text-slate-800">연락처</h2>
@@ -82,7 +124,7 @@ export default function Intro() {
           </section>
         </main>
 
-        {/* --- 복구된 하단 푸터 영역 --- */}
+        {/* --- 하단 푸터 영역 --- */}
         <footer className="px-8 py-12 bg-white text-center space-y-6">
           <div className="flex justify-center gap-5 text-[11px] text-slate-300 font-bold">
             <a href="/guide" className="hover:text-slate-400">사주 가이드</a>
@@ -96,7 +138,7 @@ export default function Intro() {
             <span className="text-slate-100">|</span>
             <a href="/privacy" className="hover:text-slate-400">개인정보처리방침</a>
           </div>
-          <p className="text-[10px] text-slate-200 font-medium">© 2026 oursai.kr | All Rights Reserved.</p>
+          <p className="text-[10px] text-slate-200 font-medium italic">© 2026 oursai.kr | All Rights Reserved.</p>
         </footer>
       </div>
     </div>
