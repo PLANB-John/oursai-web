@@ -37,7 +37,6 @@ export default function Guide() {
         </div>
 
         <main className="px-6 py-10">
-          {/* 헤더 섹션 */}
           <section className="mb-10">
             <h1 className="text-2xl font-black text-slate-800 mb-3 tracking-tight">사주 가이드</h1>
             <p className="text-[13px] text-slate-500 leading-6">
@@ -47,7 +46,6 @@ export default function Guide() {
             </p>
           </section>
 
-          {/* 가이드 카드 리스트 (2열 그리드) */}
           <section className="grid grid-cols-2 gap-4">
             {guideItems.map((item, idx) => (
               <div 
@@ -61,7 +59,6 @@ export default function Guide() {
             ))}
           </section>
 
-          {/* 하단 버튼 영역 */}
           <section className="mt-12 space-y-3">
             <button className="w-full py-4 bg-slate-50 text-slate-600 rounded-2xl text-[13px] font-bold border border-slate-100 hover:bg-slate-100 transition-colors flex items-center justify-center gap-2">
               모임 궁합 확인해보기 →
@@ -72,16 +69,21 @@ export default function Guide() {
           </section>
         </main>
 
-        {/* 푸터 영역 */}
-        <footer className="px-6 py-10 bg-white text-center border-t border-slate-50 mt-10">
-          <div className="flex justify-center gap-4 text-[11px] text-slate-300 font-bold mb-6">
-            <a href="/intro">서비스 소개</a>
-            <span>|</span>
-            <a href="/faq">자주 묻는 질문</a>
-            <span>|</span>
-            <a href="/feedback">의견 보내기</a>
+        {/* --- 하단 푸터 영역 (법적 고지 링크 포함) --- */}
+        <footer className="px-6 py-12 bg-white text-center space-y-6">
+          <div className="flex justify-center gap-5 text-[11px] text-slate-300 font-bold">
+            <a href="/intro" className="hover:text-slate-400">서비스 소개</a>
+            <span className="text-slate-100">|</span>
+            <a href="/faq" className="hover:text-slate-400">자주 묻는 질문</a>
+            <span className="text-slate-100">|</span>
+            <a href="/feedback" className="hover:text-slate-400">의견 보내기</a>
           </div>
-          <p className="text-[10px] text-slate-200 font-medium">© 2026 oursai.kr | All Rights Reserved.</p>
+          <div className="flex justify-center gap-5 text-[11px] text-slate-300 font-bold border-t border-slate-50 pt-6">
+            <a href="/terms" className="hover:text-slate-400">이용약관</a>
+            <span className="text-slate-100">|</span>
+            <a href="/privacy" className="hover:text-slate-400">개인정보처리방침</a>
+          </div>
+          <p className="text-[10px] text-slate-200 font-medium italic">© 2026 oursai.kr | All Rights Reserved.</p>
         </footer>
       </div>
     </div>
