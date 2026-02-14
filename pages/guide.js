@@ -1,22 +1,23 @@
 import React from 'react';
 import Head from 'next/head';
+import Link from 'next/link'; // 연결을 위한 Link 컴포넌트 추가
 
 const guideItems = [
-  { title: "사주 초보 완전 가이드", desc: "사주가 처음이라면 여기서 시작하세요", icon: "🔰" },
-  { title: "일주란 무엇인가", desc: "태어난 날이 알려주는 나의 본질", icon: "📅" },
-  { title: "오행 이해하기", desc: "목, 화, 토, 금, 수 다섯 가지 기운", icon: "🌱" },
-  { title: "음양 이해하기", desc: "만물을 이루는 두 가지 기운", icon: "🌗" },
-  { title: "천간과 지지", desc: "사주를 이루는 두 축의 비밀", icon: "📜" },
-  { title: "오행 성격 유형", desc: "오행으로 알아보는 나의 성격", icon: "🧠" },
-  { title: "사주 궁합 보는 법", desc: "두 사람의 기운이 만나면?", icon: "🔗" },
-  { title: "연애·결혼 궁합", desc: "사주로 보는 로맨틱 케미", icon: "💖" },
-  { title: "친구·직장 궁합", desc: "모임과 팀의 케미를 분석하면?", icon: "👥" },
-  { title: "띠별 성격과 궁합", desc: "12지신 동물들의 특징과 관계", icon: "🐯" },
-  { title: "60갑자 일주표", desc: "60가지 일주 한눈에 보기", icon: "🔢" },
-  { title: "사주 용어 사전", desc: "핵심 용어를 한곳에서 확인", icon: "📖" },
-  { title: "부모·자녀 궁합", desc: "오행으로 보는 가족 관계의 비밀", icon: "🏠" },
-  { title: "MBTI vs 사주", desc: "나를 더 잘 아는 건 어느 쪽?", icon: "🧪" },
-  { title: "사주로 보는 직업 적성", desc: "오행에 맞는 직장 찾기", icon: "💼" }
+  { title: "사주 초보 완전 가이드", desc: "사주가 처음이라면 여기서 시작하세요", icon: "🔰", link: "/guide/beginner" },
+  { title: "일주란 무엇인가", desc: "태어난 날이 알려주는 나의 본질", icon: "📅", link: "/guide/ilju" },
+  { title: "오행 이해하기", desc: "목, 화, 토, 금, 수 다섯 가지 기운", icon: "🌱", link: "/guide/five-elements" },
+  { title: "음양 이해하기", desc: "만물을 이루는 두 가지 기운", icon: "🌗", link: "/guide/yin-yang" },
+  { title: "천간과 지지", desc: "사주를 이루는 두 축의 비밀", icon: "📜", link: "/guide/ganji" },
+  { title: "오행 성격 유형", desc: "오행으로 알아보는 나의 성격", icon: "🧠", link: "/guide/personality" },
+  { title: "사주 궁합 보는 법", desc: "두 사람의 기운이 만나면?", icon: "🔗", link: "/guide/matching" },
+  { title: "연애·결혼 궁합", desc: "사주로 보는 로맨틱 케미", icon: "💖", link: "/guide/romance" },
+  { title: "친구·직장 궁합", desc: "모임과 팀의 케미를 분석하면?", icon: "👥", link: "/guide/team" },
+  { title: "띠별 성격과 궁합", desc: "12지신 동물들의 특징과 관계", icon: "🐯", link: "/guide/zodiac" },
+  { title: "60갑자 일주표", desc: "60가지 일주 한눈에 보기", icon: "🔢", link: "/guide/60gapja" },
+  { title: "사주 용어 사전", desc: "핵심 용어를 한곳에서 확인", icon: "📖", link: "/guide/dictionary" },
+  { title: "부모·자녀 궁합", desc: "오행으로 보는 가족 관계의 비밀", icon: "🏠", link: "/guide/family" },
+  { title: "MBTI vs 사주", desc: "나를 더 잘 아는 건 어느 쪽?", icon: "🧪", link: "/guide/mbti" },
+  { title: "사주로 보는 직업 적성", desc: "오행에 맞는 직장 찾기", icon: "💼", link: "/guide/career" }
 ];
 
 export default function Guide() {
@@ -46,30 +47,29 @@ export default function Guide() {
             </p>
           </section>
 
+          {/* 가이드 카드 리스트 (Link 적용) */}
           <section className="grid grid-cols-2 gap-4">
             {guideItems.map((item, idx) => (
-              <div 
-                key={idx} 
-                className="bg-slate-50 p-5 rounded-[30px] border border-slate-100 hover:border-purple-200 hover:bg-purple-50/30 transition-all cursor-pointer group"
-              >
-                <div className="text-3xl mb-4 group-hover:scale-110 transition-transform">{item.icon}</div>
-                <h3 className="font-bold text-[14px] text-slate-800 mb-1 leading-tight">{item.title}</h3>
-                <p className="text-[10px] text-slate-400 leading-relaxed">{item.desc}</p>
-              </div>
+              <Link key={idx} href={item.link}>
+                <div className="bg-slate-50 p-5 rounded-[30px] border border-slate-100 hover:border-purple-200 hover:bg-purple-50/30 transition-all cursor-pointer group h-full">
+                  <div className="text-3xl mb-4 group-hover:scale-110 transition-transform">{item.icon}</div>
+                  <h3 className="font-bold text-[14px] text-slate-800 mb-1 leading-tight">{item.title}</h3>
+                  <p className="text-[10px] text-slate-400 leading-relaxed">{item.desc}</p>
+                </div>
+              </Link>
             ))}
           </section>
 
           <section className="mt-12 space-y-3">
-            <button className="w-full py-4 bg-slate-50 text-slate-600 rounded-2xl text-[13px] font-bold border border-slate-100 hover:bg-slate-100 transition-colors flex items-center justify-center gap-2">
+            <a href="/" className="w-full py-4 bg-slate-50 text-slate-600 rounded-2xl text-[13px] font-bold border border-slate-100 hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 text-center">
               모임 궁합 확인해보기 →
-            </button>
-            <button className="w-full py-4 bg-slate-50 text-slate-600 rounded-2xl text-[13px] font-bold border border-slate-100 hover:bg-slate-100 transition-colors flex items-center justify-center gap-2">
+            </a>
+            <a href="/" className="w-full py-4 bg-slate-50 text-slate-600 rounded-2xl text-[13px] font-bold border border-slate-100 hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 text-center">
               나와 궁합 확인해보기 →
-            </button>
+            </a>
           </section>
         </main>
 
-        {/* --- 하단 푸터 영역 (법적 고지 링크 포함) --- */}
         <footer className="px-6 py-12 bg-white text-center space-y-6">
           <div className="flex justify-center gap-5 text-[11px] text-slate-300 font-bold">
             <a href="/intro" className="hover:text-slate-400">서비스 소개</a>
