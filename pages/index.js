@@ -3,16 +3,16 @@ import Head from 'next/head';
 import { motion } from 'framer-motion';
 
 export default function Home() {
-  // 1. 네트워크 구성원 데이터 (영상 속 캐릭터 재현)
+  // 1. 네트워크 구성원 데이터 (중앙 정렬을 위해 좌표 재조정)
   const users = [
-    { id: 1, name: '서윤', icon: '🐰', x: 240, y: 70 },
-    { id: 2, name: '수현', icon: '🐑', x: 340, y: 160 },
-    { id: 3, name: '지민', icon: '🐷', x: 280, y: 320 },
-    { id: 4, name: '해늘', icon: '🐮', x: 120, y: 320 },
-    { id: 5, name: '민준', icon: '🐵', x: 80, y: 160 },
+    { id: 1, name: '서윤', icon: '🐰', x: 200, y: 50 },  // 상단 중앙
+    { id: 2, name: '수현', icon: '🐑', x: 320, y: 150 }, // 우측 상단
+    { id: 3, name: '지민', icon: '🐷', x: 270, y: 300 }, // 우측 하단
+    { id: 4, name: '해늘', icon: '🐮', x: 130, y: 300 }, // 좌측 하단
+    { id: 5, name: '민준', icon: '🐵', x: 80, y: 150 },  // 좌측 상단
   ];
 
-  // 2. 인연 연결 데이터 (영상 속 라벨 및 색상 재현)
+  // 2. 인연 연결 데이터
   const connections = [
     { from: 1, to: 2, label: '천생연분', color: '#A855F7' },
     { from: 2, to: 3, label: '그럭저럭', color: '#FACC15' },
@@ -31,16 +31,31 @@ export default function Home() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-20">
         
-        {/* --- 1. 상단 도입부 (이미지 피드백 반영) --- */}
+        {/* --- 1. 상단 도입부 (수정됨: 색상 및 애니메이션) --- */}
         <header className="pt-20 pb-8 text-center space-y-4">
           <motion.div 
             initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
             className="flex flex-col items-center gap-3"
           >
             <div className="flex items-center gap-2">
-              <span className="text-[#FDA7DF] text-2xl">✦</span>
-              <span className="text-[#D980FA] text-[32px] font-black tracking-tight">우리 사이</span>
-              <span className="text-[#FDA7DF] text-2xl">✦</span>
+              {/* 왼쪽 별 애니메이션 */}
+              <motion.span 
+                className="text-[#FDA7DF] text-2xl"
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              >✦</motion.span>
+              
+              {/* 타이틀 색상 그라데이션 적용 */}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D980FA] to-[#FDA7DF] text-[32px] font-black tracking-tight drop-shadow-sm">
+                우리 사이
+              </span>
+              
+              {/* 오른쪽 별 애니메이션 (딜레이 추가) */}
+              <motion.span 
+                className="text-[#FDA7DF] text-2xl"
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+              >✦</motion.span>
             </div>
             <a href="/intro" className="text-[13px] text-slate-300 font-medium border-b border-slate-100 pb-0.5">
               서비스 소개 →
@@ -51,9 +66,10 @@ export default function Home() {
           </h1>
         </header>
 
-        {/* --- 2. 핵심 애니메이션: 인연 네트워크 --- */}
-        <div className="relative w-full h-[420px] flex justify-center items-center">
-          <svg className="absolute w-full h-full" viewBox="0 0 400 400">
+        {/* --- 2. 핵심 애니메이션: 인연 네트워크 (수정됨: 중앙 정렬 보정) --- */}
+        <div className="relative w-full h-[400px] flex justify-center items-center my-4">
+          {/* SVG 뷰박스 및 크기 조정으로 중앙 배치 유도 */}
+          <svg className="absolute w-[400px] h-[400px]" viewBox="0 0 400 400" style={{ left: '50%', transform: 'translateX(-50%)' }}>
             {connections.map((conn, i) => {
               const fromUser = users.find(u => u.id === conn.from);
               const toUser = users.find(u => u.id === conn.to);
@@ -81,22 +97,25 @@ export default function Home() {
             })}
           </svg>
 
-          {users.map((user) => (
-            <motion.div
-              key={user.id}
-              style={{ left: user.x - 35, top: user.y - 35 }}
-              className="absolute w-[70px] h-[70px] flex flex-col items-center justify-center"
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 4, repeat: Infinity, delay: user.id * 0.4 }}
-            >
-              <div className="w-14 h-14 bg-white rounded-[20px] shadow-xl border border-slate-50 flex items-center justify-center text-3xl">
-                {user.icon}
-              </div>
-              <span className="text-[11px] font-bold text-slate-400 mt-2 bg-white px-2 py-0.5 rounded-full shadow-sm border border-slate-50">
-                {user.name}
-              </span>
-            </motion.div>
-          ))}
+          {/* 아이콘들 중앙 정렬 보정 */}
+          <div className="relative w-[400px] h-[400px]">
+            {users.map((user) => (
+              <motion.div
+                key={user.id}
+                style={{ left: user.x - 35, top: user.y - 35 }} // 좌표 기준점 중앙으로 설정
+                className="absolute w-[70px] h-[70px] flex flex-col items-center justify-center"
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 4, repeat: Infinity, delay: user.id * 0.4 }}
+              >
+                <div className="w-14 h-14 bg-white rounded-[20px] shadow-xl border border-slate-50 flex items-center justify-center text-3xl relative z-10">
+                  {user.icon}
+                </div>
+                <span className="text-[11px] font-bold text-slate-400 mt-2 bg-white px-2 py-0.5 rounded-full shadow-sm border border-slate-50 relative z-10">
+                  {user.name}
+                </span>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         {/* --- 3. 실시간 통계 --- */}
@@ -121,7 +140,7 @@ export default function Home() {
           </button>
         </main>
 
-        {/* --- 5. 사주 알아보기 (가이드 링크) --- */}
+        {/* --- 5. 사주 알아보기 --- */}
         <section className="px-8 py-12 space-y-6">
           <div className="flex justify-between items-end px-2">
             <h2 className="text-lg font-black text-slate-800">사주 알아보기</h2>
@@ -142,7 +161,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- 6. 서비스 소개 요약 --- */}
+        {/* --- 6. 서비스 소개 --- */}
         <section className="px-8 py-16 space-y-8">
           <div className="space-y-4 px-2">
             <h2 className="text-xl font-black text-slate-800">우리 사이란?</h2>
@@ -159,7 +178,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- 7. 최종 푸터 (표준 스타일) --- */}
+        {/* --- 7. 최종 푸터 --- */}
         <footer className="px-8 py-16 bg-white text-center space-y-10 border-t border-slate-50">
           <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold">
             <a href="/intro" className="hover:text-purple-400">서비스 소개</a>
