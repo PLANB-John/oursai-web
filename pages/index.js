@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
 
 export default function Home() {
+  // 1. 네트워크 구성원 데이터 (영상 속 캐릭터 재현)
   const users = [
     { id: 1, name: '서윤', icon: '🐰', x: 240, y: 70 },
     { id: 2, name: '수현', icon: '🐑', x: 340, y: 160 },
@@ -11,6 +12,7 @@ export default function Home() {
     { id: 5, name: '민준', icon: '🐵', x: 80, y: 160 },
   ];
 
+  // 2. 인연 연결 데이터 (영상 속 라벨 및 색상 재현)
   const connections = [
     { from: 1, to: 2, label: '천생연분', color: '#A855F7' },
     { from: 2, to: 3, label: '그럭저럭', color: '#FACC15' },
@@ -29,7 +31,7 @@ export default function Home() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-20">
         
-        {/* --- 1. 상단 도입부 (20260215204821.png 디자인 반영) --- */}
+        {/* --- 1. 상단 도입부 (이미지 피드백 반영) --- */}
         <header className="pt-20 pb-8 text-center space-y-4">
           <motion.div 
             initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
@@ -49,7 +51,7 @@ export default function Home() {
           </h1>
         </header>
 
-        {/* --- 2. 인연 네트워크 애니메이션 (첫페이지.mp4 기반) --- */}
+        {/* --- 2. 핵심 애니메이션: 인연 네트워크 --- */}
         <div className="relative w-full h-[420px] flex justify-center items-center">
           <svg className="absolute w-full h-full" viewBox="0 0 400 400">
             {connections.map((conn, i) => {
@@ -95,25 +97,21 @@ export default function Home() {
               </span>
             </motion.div>
           ))}
-          <div className="absolute bottom-6 flex items-center gap-1.5 opacity-30">
-            <span className="text-sm">🪄</span>
-            <p className="text-[10px] text-slate-400 font-bold tracking-widest uppercase">이음의 마법</p>
-          </div>
         </div>
 
         {/* --- 3. 실시간 통계 --- */}
         <section className="px-8 py-4 grid grid-cols-2 gap-4">
-          <div className="bg-slate-50/50 p-6 rounded-[32px] border border-slate-100/50 text-center space-y-1 shadow-inner">
+          <div className="bg-slate-50/50 p-6 rounded-[32px] border border-slate-100/50 text-center space-y-1">
             <p className="text-[22px] font-black text-[#8e44ad]">58,644</p>
             <p className="text-[11px] text-slate-400 font-bold uppercase tracking-tighter">만들어진 모임</p>
           </div>
-          <div className="bg-slate-50/50 p-6 rounded-[32px] border border-slate-100/50 text-center space-y-1 shadow-inner">
+          <div className="bg-slate-50/50 p-6 rounded-[32px] border border-slate-100/50 text-center space-y-1">
             <p className="text-[22px] font-black text-[#8e44ad]">283,980</p>
             <p className="text-[11px] text-slate-400 font-bold uppercase tracking-tighter">이어진 인연</p>
           </div>
         </section>
 
-        {/* --- 4. 궁합 생성 버튼 --- */}
+        {/* --- 4. 메인 액션 버튼 --- */}
         <main className="px-8 py-10 space-y-4">
           <button className="w-full py-6 bg-[#9b59b6] text-white rounded-[24px] font-black text-[18px] shadow-lg shadow-purple-100 hover:brightness-110 active:scale-95 transition-all">
             모임 궁합 생성
@@ -123,7 +121,7 @@ export default function Home() {
           </button>
         </main>
 
-        {/* --- 5. 사주 알아보기 카드 --- */}
+        {/* --- 5. 사주 알아보기 (가이드 링크) --- */}
         <section className="px-8 py-12 space-y-6">
           <div className="flex justify-between items-end px-2">
             <h2 className="text-lg font-black text-slate-800">사주 알아보기</h2>
@@ -144,7 +142,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- 6. 서비스 소개 --- */}
+        {/* --- 6. 서비스 소개 요약 --- */}
         <section className="px-8 py-16 space-y-8">
           <div className="space-y-4 px-2">
             <h2 className="text-xl font-black text-slate-800">우리 사이란?</h2>
@@ -153,19 +151,15 @@ export default function Home() {
             </p>
           </div>
           <div className="bg-slate-50 p-8 rounded-[40px] space-y-4 border border-slate-100">
-            <p className="text-[13px] font-bold text-slate-700 flex items-center gap-3">
-              <span className="text-purple-500">✓</span> 최대 12명까지 그룹 궁합 분석
-            </p>
-            <p className="text-[13px] font-bold text-slate-700 flex items-center gap-3">
-              <span className="text-purple-500">✓</span> 완전 무료, 회원가입 불필요
-            </p>
-            <p className="text-[13px] font-bold text-slate-700 flex items-center gap-3">
-              <span className="text-purple-500">✓</span> 링크 공유로 간편한 참여
-            </p>
+            {['최대 12명까지 그룹 궁합 분석', '완전 무료, 회원가입 불필요', '링크 공유로 간편한 참여'].map((txt, i) => (
+              <p key={i} className="text-[13px] font-bold text-slate-700 flex items-center gap-3">
+                <span className="text-purple-500">✓</span> {txt}
+              </p>
+            ))}
           </div>
         </section>
 
-        {/* --- 7. 일관성 있는 푸터 (우리 사이 스타일) --- */}
+        {/* --- 7. 최종 푸터 (표준 스타일) --- */}
         <footer className="px-8 py-16 bg-white text-center space-y-10 border-t border-slate-50">
           <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold">
             <a href="/intro" className="hover:text-purple-400">서비스 소개</a>
