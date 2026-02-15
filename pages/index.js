@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { useRouter } from 'next/router'; // 페이지 이동 도구 추가
 
 // 숫자가 올라가는 애니메이션 컴포넌트
 const AnimatedNumber = ({ value }) => {
@@ -16,6 +17,8 @@ const AnimatedNumber = ({ value }) => {
 };
 
 export default function Home() {
+  const router = useRouter(); // 이동 기능을 사용할 준비
+
   const users = [
     { id: 1, name: '서윤', icon: '🐰', x: 200, y: 50 },
     { id: 2, name: '수현', icon: '🐑', x: 320, y: 150 },
@@ -35,10 +38,10 @@ export default function Home() {
   ];
 
   const guideCards = [
-    { emoji: '🔰', t: '사주 초보 가이드', d: '사주가 무엇인지 쉽게...', link: '/guide/beginner' },
-    { emoji: '🔗', t: '사주 궁합 보는 법', d: '서로의 합과 충을...', link: '/guide/matching' },
-    { emoji: '🧪', t: 'MBTI vs 사주', d: '성격 분석 도구의 차이...', link: '/guide/mbti' },
-    { emoji: '🐯', t: '띠별 성격과 궁합', d: '12지신 동물의 특징...', link: '/guide/zodiac' }
+    { emoji: '🌱', t: '사주 초보 가이드', d: '사주가 무엇인지 쉽게...', link: '/guide/beginner' },
+    { emoji: '🤝', t: '사주 궁합 보는 법', d: '서로의 합과 충을...', link: '/guide/matching' },
+    { emoji: '☯️', t: 'MBTI vs 사주', d: '성격 분석 도구의 차이...', link: '/guide/mbti' },
+    { emoji: '🐾', t: '띠별 성격과 궁합', d: '12지신 동물의 특징...', link: '/guide/zodiac' }
   ];
 
   return (
@@ -49,7 +52,7 @@ export default function Home() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-20">
         
-        {/* --- 1. 상단 도입부 (위치 조정 및 글씨 크기 확대) --- */}
+        {/* --- 1. 상단 도입부 --- */}
         <header className="pt-14 pb-6 text-center space-y-4">
           <motion.div 
             initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
@@ -129,7 +132,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* --- 3. 실시간 통계 (숫자 카운팅 효과) --- */}
+        {/* --- 3. 실시간 통계 --- */}
         <section className="px-8 py-4 grid grid-cols-2 gap-4">
           <div className="bg-slate-50/50 p-6 rounded-[32px] border border-slate-100/50 text-center space-y-1">
             <p className="text-[24px] font-black text-[#8e44ad]">
@@ -145,17 +148,22 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- 4. 메인 액션 버튼 --- */}
+        {/* --- 4. 메인 액션 버튼 (이동 기능 연결 완료) --- */}
         <main className="px-8 py-8 space-y-4">
-          <button className="w-full py-6 bg-[#9b59b6] text-white rounded-[24px] font-black text-[18px] shadow-lg shadow-purple-100 hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3">
+          <button 
+            onClick={() => router.push('/create-group')} // 모임 생성 페이지로 이동
+            className="w-full py-6 bg-[#9b59b6] text-white rounded-[24px] font-black text-[18px] shadow-lg shadow-purple-100 hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3"
+          >
             <span>👨‍👩‍👧‍👦</span> 모임 궁합 생성
-          </button>
-          <button className="w-full py-6 bg-white text-[#9b59b6] rounded-[24px] font-black text-[18px] border-2 border-[#9b59b6] hover:bg-purple-50 active:scale-95 transition-all flex items-center justify-center gap-3">
+          </button> [cite: 2026-02-15]
+          <button 
+            className="w-full py-6 bg-white text-[#9b59b6] rounded-[24px] font-black text-[18px] border-2 border-[#9b59b6] hover:bg-purple-50 active:scale-95 transition-all flex items-center justify-center gap-3"
+          >
             <span>💑</span> 나와 궁합 생성
           </button>
         </main>
 
-        {/* --- 5. 사주 알아보기 (이모지 동기화) --- */}
+        {/* --- 5. 사주 알아보기 --- */}
         <section className="px-8 py-10 space-y-6">
           <div className="flex justify-between items-end px-2">
             <h2 className="text-lg font-black text-slate-800">사주 알아보기</h2>
@@ -189,7 +197,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- 7. 최종 푸터 (모든 링크 복구 완료) --- */}
+        {/* --- 7. 최종 푸터 --- */}
         <footer className="px-8 py-16 bg-white text-center space-y-10 border-t border-slate-50">
           <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold">
             <a href="/intro" className="hover:text-purple-400 transition-colors">서비스 소개</a>
