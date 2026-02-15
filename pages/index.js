@@ -34,12 +34,11 @@ export default function Home() {
     { from: 2, to: 4, label: '삐걱삐걱', color: '#F87171' },
   ];
 
-  // 사주 가이드 데이터 (상세 페이지 이모지와 일치시킴)
   const guideCards = [
     { emoji: '🔰', t: '사주 초보 가이드', d: '사주가 무엇인지 쉽게...', link: '/guide/beginner' },
-    { emoji: '🔗', t: '사주 궁합 보는 법', d: '서로의 합과 충을...', link: '/guide/matching' }, // 친구·직장 궁합 이모지 반영
-    { emoji: '🧪', t: 'MBTI vs 사주', d: '성격 분석 도구의 차이...', link: '/guide/mbti' }, // MBTI vs 사주 이모지 반영
-    { emoji: '🐯', t: '띠별 성격과 궁합', d: '12지신 동물의 특징...', link: '/guide/zodiac' } // 띠별 궁합 이모지 반영
+    { emoji: '🔗', t: '사주 궁합 보는 법', d: '서로의 합과 충을...', link: '/guide/matching' },
+    { emoji: '🧪', t: 'MBTI vs 사주', d: '성격 분석 도구의 차이...', link: '/guide/mbti' },
+    { emoji: '🐯', t: '띠별 성격과 궁합', d: '12지신 동물의 특징...', link: '/guide/zodiac' }
   ];
 
   return (
@@ -50,7 +49,7 @@ export default function Home() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-20">
         
-        {/* --- 1. 상단 도입부 (별 애니메이션 & 대형 타이틀) --- */}
+        {/* --- 1. 상단 도입부 (위치 조정 및 글씨 크기 확대) --- */}
         <header className="pt-14 pb-6 text-center space-y-4">
           <motion.div 
             initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
@@ -130,7 +129,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* --- 3. 실시간 통계 (숫자 카운팅) --- */}
+        {/* --- 3. 실시간 통계 (숫자 카운팅 효과) --- */}
         <section className="px-8 py-4 grid grid-cols-2 gap-4">
           <div className="bg-slate-50/50 p-6 rounded-[32px] border border-slate-100/50 text-center space-y-1">
             <p className="text-[24px] font-black text-[#8e44ad]">
@@ -146,17 +145,17 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- 4. 메인 액션 버튼 (이모지 추가 & 원문 유지) --- */}
-        <main className="px-8 py-10 space-y-4">
+        {/* --- 4. 메인 액션 버튼 --- */}
+        <main className="px-8 py-8 space-y-4">
           <button className="w-full py-6 bg-[#9b59b6] text-white rounded-[24px] font-black text-[18px] shadow-lg shadow-purple-100 hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3">
             <span>👨‍👩‍👧‍👦</span> 모임 궁합 생성
-          </button> [cite: 2026-02-15]
+          </button>
           <button className="w-full py-6 bg-white text-[#9b59b6] rounded-[24px] font-black text-[18px] border-2 border-[#9b59b6] hover:bg-purple-50 active:scale-95 transition-all flex items-center justify-center gap-3">
             <span>💑</span> 나와 궁합 생성
-          </button> [cite: 2026-02-15]
+          </button>
         </main>
 
-        {/* --- 5. 사주 알아보기 (가이드 이모지 동기화) --- */}
+        {/* --- 5. 사주 알아보기 (이모지 동기화) --- */}
         <section className="px-8 py-10 space-y-6">
           <div className="flex justify-between items-end px-2">
             <h2 className="text-lg font-black text-slate-800">사주 알아보기</h2>
@@ -164,7 +163,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             {guideCards.map((card, i) => (
-              <a key={i} href={card.link} className="bg-white p-6 rounded-[30px] border border-slate-100 shadow-sm hover:shadow-md transition-all group overflow-hidden relative">
+              <a key={i} href={card.link} className="bg-white p-6 rounded-[30px] border border-slate-100 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
                 <span className="text-[28px] mb-2 block">{card.emoji}</span>
                 <p className="text-[13px] font-bold text-slate-800 mb-1 group-hover:text-purple-500 transition-colors">{card.t}</p>
                 <p className="text-[10px] text-slate-400 leading-4">{card.d}</p>
@@ -173,14 +172,36 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- 6. 서비스 소개 및 푸터 생략 (동일 유지) --- */}
+        {/* --- 6. 서비스 소개 --- */}
+        <section className="px-8 py-16 space-y-8 bg-slate-50/50">
+          <div className="space-y-4 px-2">
+            <h2 className="text-xl font-black text-slate-800">우리 사이란?</h2>
+            <p className="text-[14px] text-slate-500 leading-8">
+              우리 사이는 사주 일주를 기반으로 한 그룹 궁합 분석 서비스입니다. 전통적인 사주 이론을 현대적으로 재해석하여 누구나 쉽게 이해할 수 있는 방식으로 궁합 결과를 제공합니다.
+            </p>
+          </div>
+          <div className="bg-white p-8 rounded-[40px] space-y-4 border border-slate-100 shadow-sm">
+            {['최대 12명까지 그룹 궁합 분석', '완전 무료, 회원가입 불필요', '링크 공유로 간편한 참여'].map((txt, i) => (
+              <p key={i} className="text-[13px] font-bold text-slate-700 flex items-center gap-3">
+                <span className="text-purple-500 bg-purple-50 rounded-full p-1">✓</span> {txt}
+              </p>
+            ))}
+          </div>
+        </section>
+
+        {/* --- 7. 최종 푸터 (모든 링크 복구 완료) --- */}
         <footer className="px-8 py-16 bg-white text-center space-y-10 border-t border-slate-50">
           <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold">
-            <a href="/intro" className="hover:text-purple-400">서비스 소개</a>
+            <a href="/intro" className="hover:text-purple-400 transition-colors">서비스 소개</a>
             <span className="text-slate-100">|</span>
-            <a href="/faq" className="hover:text-purple-400">자주 묻는 질문</a>
+            <a href="/faq" className="hover:text-purple-400 transition-colors">자주 묻는 질문</a>
             <span className="text-slate-100">|</span>
-            <a href="/feedback" className="hover:text-purple-400">의견 보내기</a>
+            <a href="/feedback" className="hover:text-purple-400 transition-colors">의견 보내기</a>
+          </div>
+          <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold">
+            <a href="/terms" className="hover:text-purple-400 transition-colors">이용약관</a>
+            <span className="text-slate-100">|</span>
+            <a href="/privacy" className="hover:text-purple-400 transition-colors">개인정보처리방침</a>
           </div>
           <p className="text-[11px] text-slate-200 font-medium italic">© 2026 oursai.kr | All Rights Reserved.</p>
         </footer>
