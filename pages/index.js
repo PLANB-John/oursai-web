@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { useRouter } from 'next/router'; // 페이지 이동 도구 추가
+import { useRouter } from 'next/router';
 
 // 숫자가 올라가는 애니메이션 컴포넌트
 const AnimatedNumber = ({ value }) => {
@@ -17,7 +17,7 @@ const AnimatedNumber = ({ value }) => {
 };
 
 export default function Home() {
-  const router = useRouter(); // 이동 기능을 사용할 준비
+  const router = useRouter();
 
   const users = [
     { id: 1, name: '서윤', icon: '🐰', x: 200, y: 50 },
@@ -38,10 +38,10 @@ export default function Home() {
   ];
 
   const guideCards = [
-    { emoji: '🌱', t: '사주 초보 가이드', d: '사주가 무엇인지 쉽게...', link: '/guide/beginner' },
-    { emoji: '🤝', t: '사주 궁합 보는 법', d: '서로의 합과 충을...', link: '/guide/matching' },
-    { emoji: '☯️', t: 'MBTI vs 사주', d: '성격 분석 도구의 차이...', link: '/guide/mbti' },
-    { emoji: '🐾', t: '띠별 성격과 궁합', d: '12지신 동물의 특징...', link: '/guide/zodiac' }
+    { emoji: '🔰', t: '사주 초보 가이드', d: '사주가 무엇인지 쉽게...', link: '/guide/beginner' },
+    { emoji: '🔗', t: '사주 궁합 보는 법', d: '서로의 합과 충을...', link: '/guide/matching' },
+    { emoji: '🧪', t: 'MBTI vs 사주', d: '성격 분석 도구의 차이...', link: '/guide/mbti' },
+    { emoji: '🐯', t: '띠별 성격과 궁합', d: '12지신 동물의 특징...', link: '/guide/zodiac' }
   ];
 
   return (
@@ -134,13 +134,13 @@ export default function Home() {
 
         {/* --- 3. 실시간 통계 --- */}
         <section className="px-8 py-4 grid grid-cols-2 gap-4">
-          <div className="bg-slate-50/50 p-6 rounded-[32px] border border-slate-100/50 text-center space-y-1">
+          <div className="bg-slate-50/50 p-6 rounded-[32px] border border-slate-100/50 text-center space-y-1 shadow-inner">
             <p className="text-[24px] font-black text-[#8e44ad]">
               <AnimatedNumber value={58644} />
             </p>
             <p className="text-[11px] text-slate-400 font-bold uppercase tracking-tighter">만들어진 모임</p>
           </div>
-          <div className="bg-slate-50/50 p-6 rounded-[32px] border border-slate-100/50 text-center space-y-1">
+          <div className="bg-slate-50/50 p-6 rounded-[32px] border border-slate-100/50 text-center space-y-1 shadow-inner">
             <p className="text-[24px] font-black text-[#8e44ad]">
               <AnimatedNumber value={283980} />
             </p>
@@ -148,14 +148,14 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- 4. 메인 액션 버튼 (이동 기능 연결 완료) --- */}
+        {/* --- 4. 메인 액션 버튼 --- */}
         <main className="px-8 py-8 space-y-4">
           <button 
-            onClick={() => router.push('/create-group')} // 모임 생성 페이지로 이동
+            onClick={() => router.push('/create-group')}
             className="w-full py-6 bg-[#9b59b6] text-white rounded-[24px] font-black text-[18px] shadow-lg shadow-purple-100 hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3"
           >
             <span>👨‍👩‍👧‍👦</span> 모임 궁합 생성
-          </button> [cite: 2026-02-15]
+          </button>
           <button 
             className="w-full py-6 bg-white text-[#9b59b6] rounded-[24px] font-black text-[18px] border-2 border-[#9b59b6] hover:bg-purple-50 active:scale-95 transition-all flex items-center justify-center gap-3"
           >
