@@ -124,7 +124,7 @@ export default function Terms() {
             </section>
 
             <p className="text-[12px] text-slate-400 pt-10 border-t border-slate-50">
-              시행일: 2026년 2월 13일
+              시행일: 2026년 2월 10일
             </p>
           </div>
         </main>
