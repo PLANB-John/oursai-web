@@ -19,7 +19,7 @@ const faqData = [
     question: "결과에 나오는 동물이 제 띠와 달라요",
     answer: (
       <div className="space-y-3">
-        <p>이음에서 보여드리는 동물은 '띠'가 아니라 '일주(日柱)'의 동물입니다.</p>
+        <p>우리 사이에서 보여드리는 동물은 '띠'가 아니라 '일주(日柱)'의 동물입니다.</p>
         <ul className="list-disc pl-5 space-y-1">
           <li><strong>띠:</strong> 태어난 '해'를 기준으로 정해지는 12년 주기의 동물</li>
           <li><strong>일주:</strong> 태어난 '날'을 기준으로 정해지는 60일 주기의 동물</li>
@@ -42,7 +42,7 @@ const faqData = [
   },
   {
     question: "같은 친구인데 새 모임에서 궁합 점수가 달라요",
-    answer: "이음은 최근 궁합 분석 시스템을 업그레이드하면서 해석 방식이 더욱 정교해졌습니다. 기존 데이터와 미세한 차이가 발생할 수 있으나, 더 정확해진 새로운 결과를 기준으로 보시는 것을 추천해 드립니다."
+    answer: "우리 사이는 최근 궁합 분석 시스템을 업그레이드하면서 해석 방식이 더욱 정교해졌습니다. 기존 데이터와 미세한 차이가 발생할 수 있으나, 더 정확해진 새로운 결과를 기준으로 보시는 것을 추천해 드립니다."
   },
   {
     question: "'오늘의 일진'은 무엇인가요?",
@@ -58,8 +58,33 @@ const faqData = [
     )
   },
   {
+    question: "'나와 궁합'에서 친구가 볼 수 있는 정보는?",
+    answer: (
+      <div className="space-y-3">
+        <p>친구들은 공유받은 링크로 참여하여 다음 정보를 확인할 수 있어요.</p>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>방장과 자신의 1:1 궁합 결과 (등급, 해석)</li>
+          <li>전체 참여자 중 자신의 순위 (예: 8명 중 2위)</li>
+        </ul>
+        <p>단, 다른 참여자의 결과나 전체 순위표는 볼 수 없습니다. 전체 순위표는 방장만 PIN을 입력해서 확인할 수 있어요.</p>
+      </div>
+    )
+  },
+  {
+    question: "'나와 궁합' PIN을 잊어버렸어요",
+    answer: "현재 PIN 재설정 기능은 제공하지 않고 있습니다. PIN을 잊어버리신 경우, 새로운 궁합방을 만들어 친구들에게 다시 링크를 공유해주세요. 불편을 드려 죄송합니다. 향후 개선할 예정입니다."
+  },
+  {
     question: "생시(태어난 시간)는 꼭 입력해야 하나요?",
-    answer: "아니요, 선택 사항입니다. 태어난 날(일주)만으로도 궁합 분석은 충분히 가능합니다. 하지만 정확한 시주(時柱)까지 입력하면 훨씬 더 정밀한 분석 결과를 얻을 수 있습니다."
+    answer: "아니요, 선택 사항입니다. 생시를 모르시더라도 궁합 분석은 정상적으로 진행됩니다. 다만, 생시를 입력하시면 시주(時柱)까지 반영된 더 정밀한 분석이 가능해요. 정확한 생시를 아시는 경우에만 입력해주세요."
+  },
+  {
+    question: "사주 가이드는 어디서 볼 수 있나요?",
+    answer: "홈 화면 하단의 '사주 알아보기' 섹션에서 다양한 가이드 콘텐츠를 확인할 수 있습니다. 사주 초보 가이드부터 오행, 천간지지, 60일주, 띠별 궁합까지 폭넓은 콘텐츠를 준비해두었으니 궁금하신 분은 가이드 페이지를 방문해보세요."
+  },
+  {
+    question: "오류가 있거나 문의하고 싶어요",
+    answer: "서비스 이용 중 문제가 발생하거나 의견이 있으시면 '의견 보내기'를 통해 알려주세요. 버그 신고, 기능 제안, 일반 문의 모두 환영합니다."
   }
 ];
 
@@ -107,7 +132,7 @@ export default function FAQ() {
                   </span>
                 </button>
                 <div 
-                  className={`transition-all duration-300 ease-in-out ${openIndex === idx ? 'max-h-[500px] opacity-100 py-6' : 'max-h-0 opacity-0 overflow-hidden'}`}
+                  className={`transition-all duration-300 ease-in-out ${openIndex === idx ? 'max-h-[800px] opacity-100 py-6' : 'max-h-0 opacity-0 overflow-hidden'}`}
                 >
                   <div className="px-4 text-[13px] text-slate-500 leading-7 bg-slate-50 rounded-2xl p-6">
                     {item.answer}
