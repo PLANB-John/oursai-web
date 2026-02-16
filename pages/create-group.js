@@ -19,7 +19,7 @@ export default function CreateGroup() {
     pin: '' // 모임장 PIN
   });
 
-  // 2. 일주 카드 표시 조건 (이름, 성별, 생년월일 8자리 입력 시 자동 나타남)
+  // 2. 일주 카드 표시 조건
   const isIljuVisible = formData.userName.trim().length > 0 && 
                         formData.gender !== '' && 
                         formData.birthDate.length === 8;
@@ -41,7 +41,7 @@ export default function CreateGroup() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-20">
         
-        {/* --- 로딩 오버레이 (영상 디자인 100% 재현) --- */}
+        {/* --- 로딩 오버레이 --- */}
         <AnimatePresence>
           {isLoading && (
             <motion.div 
@@ -67,26 +67,29 @@ export default function CreateGroup() {
             <p className="text-[14px] text-slate-400 font-medium">모임을 만들고, 멤버들의 궁합을 확인해보세요</p>
           </div>
 
-          {/* 단계 안내 바 */}
+          {/* --- 단계 안내 바 (수정됨: 모든 단계 활성화 컬러 적용) --- */}
           <section className="bg-slate-50/50 rounded-[32px] p-6 border border-slate-100 space-y-6">
             <div className="flex justify-around items-start">
+              {/* 1단계: 모임 만들기 */}
               <div className="flex flex-col items-center gap-2">
                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-[#D980FA] border-2 border-[#D980FA]/20">
                   <span className="text-xl">👤</span>
                 </div>
-                <p className="text-[11px] font-bold text-[#D980FA] leading-tight text-center">모임 만들기<br/><span className="font-medium text-slate-400 opacity-60">내 정보 입력</span></p>
+                <p className="text-[11px] font-bold text-[#D980FA] leading-tight text-center">모임 만들기<br/><span className="font-medium text-slate-400 opacity-80">내 정보 입력</span></p>
               </div>
-              <div className="flex flex-col items-center gap-2 opacity-40">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400">
+              {/* 2단계: 멤버 초대 (컬러 활성화) */}
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-[#D980FA] border-2 border-[#D980FA]/20">
                   <span className="text-xl">🔗</span>
                 </div>
-                <p className="text-[11px] font-bold text-slate-800 leading-tight text-center">멤버 초대<br/><span className="font-medium">링크로 참여</span></p>
+                <p className="text-[11px] font-bold text-[#D980FA] leading-tight text-center">멤버 초대<br/><span className="font-medium text-slate-400 opacity-80">링크로 참여</span></p>
               </div>
-              <div className="flex flex-col items-center gap-2 opacity-40">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400">
+              {/* 3단계: 궁합 확인 (컬러 활성화) */}
+              <div className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-[#D980FA] border-2 border-[#D980FA]/20">
                   <span className="text-xl">⚖️</span>
                 </div>
-                <p className="text-[11px] font-bold text-slate-800 leading-tight text-center">궁합 확인<br/><span className="font-medium">관계도 시각화</span></p>
+                <p className="text-[11px] font-bold text-[#D980FA] leading-tight text-center">궁합 확인<br/><span className="font-medium text-slate-400 opacity-80">관계도 시각화</span></p>
               </div>
             </div>
           </section>
@@ -220,7 +223,7 @@ export default function CreateGroup() {
             </button>
           </section>
 
-          {/* --- 하단 상세 가이드 아코디언 (요청 문구 100% 반영) --- */}
+          {/* --- 하단 상세 가이드 아코디언 --- */}
           <section className="pt-10 space-y-6">
             <h2 className="text-[18px] font-black text-slate-800 flex items-center gap-2 px-2">
               <span className="text-[#D980FA]">✨</span> 일주로 보는 궁합이란?
@@ -270,7 +273,7 @@ export default function CreateGroup() {
           </section>
         </main>
 
-        {/* --- 최종 푸터 (이용약관 및 방침 포함) --- */}
+        {/* --- 최종 푸터 --- */}
         <footer className="px-8 py-16 bg-white text-center space-y-10 border-t border-slate-50">
           <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold">
             <a href="/intro" className="hover:text-purple-400 transition-colors">서비스 소개</a>
