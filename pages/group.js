@@ -9,21 +9,21 @@ export default function GroupDetail() {
   const [openAccordion, setOpenAccordion] = useState(0);
   const [selectedMemberId, setSelectedMemberId] = useState(null);
   const [members, setMembers] = useState([]);
-  const [groupName, setGroupName] = useState(''); // 1. 모임 이름 상태 추가 [cite: 2026-02-16]
+  const [groupName, setGroupName] = useState(''); // 1. 동적 모임 이름 상태 [cite: 2026-02-17]
 
-  // 데이터 로드 로직: 저장소에서 모임 이름과 실제 인원을 불러옴 [cite: 2026-02-16]
+  // 데이터 로드 로직: 저장소에서 입력된 정보를 불러옴 [cite: 2026-02-16, 2026-02-17]
   useEffect(() => {
     if (!router.isReady) return;
 
-    // 모임 이름 로드 (없으면 기본값) [cite: 2026-02-16]
+    // 수정사항 1: localStorage에서 모임 이름 로드 (없으면 '우리 모임') [cite: 2026-02-17]
     const savedGroupName = localStorage.getItem('currentGroupName') || '우리 모임';
     setGroupName(savedGroupName);
 
     const savedMembers = JSON.parse(localStorage.getItem('groupMembers') || '[]');
     
-    // 데이터가 아예 없으면 (방금 생성한 경우) 방장 정보 생성 [cite: 2026-02-16]
+    // 수정사항 2: 데이터가 없으면 입력한 방장 이름으로 초기화 [cite: 2026-02-17]
     if (savedMembers.length === 0) {
-      const savedLeaderName = localStorage.getItem('currentUserName') || '방장'; // 2. 입력한 이름 반영 [cite: 2026-02-16]
+      const savedLeaderName = localStorage.getItem('currentUserName') || '방장'; 
       const initialLeader = [{ 
         id: 0, 
         name: savedLeaderName, 
@@ -40,14 +40,32 @@ export default function GroupDetail() {
     }
   }, [router.isReady]);
 
+  // 에러 방지용 변수 정의
   const hasJoined = members.length >= 2;
 
+  // 다각형 좌표 계산 로직 (최대 12명 대응)
   const getCoordinates = (index, total) => {
     if (total === 1) return { x: 0, y: 0 };
     if (total === 2) return { x: 0, y: index === 0 ? -90 : 90 };
     const radius = total > 5 ? 120 : 100;
     const angle = (index * 2 * Math.PI) / total - Math.PI / 2;
     return { x: radius * Math.cos(angle), y: radius * Math.sin(angle) };
+  };
+
+  // 공유 기능 (링크 복사 / 공유)
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    alert("링크가 복사되었습니다!");
+    setIsShareOpen(false);
+  };
+
+  const handleShareLink = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: '우리 사이', url: window.location.href });
+      } catch (err) { console.log('공유 취소'); }
+    } else { handleCopyLink(); }
+    setIsShareOpen(false);
   };
 
   return (
@@ -66,16 +84,33 @@ export default function GroupDetail() {
 
         <main className="flex-1 flex flex-col items-center">
           <div className="text-center mt-8 mb-8">
-            {/* 수정사항 1: 동적 모임 이름 반영 [cite: 2026-02-16] */}
+            {/* 수정사항 1: 연동된 모임 이름 표시 [cite: 2026-02-17] */}
             <h1 className="text-[26px] font-black text-slate-800 tracking-tight flex items-center justify-center gap-1">
               {groupName} <span className="text-slate-200 text-lg">⚙️</span>
             </h1>
             <p className="text-[14px] text-slate-400 font-bold mt-1">{members.length}명 참여 중</p>
           </div>
 
-          <div className="flex gap-2 mb-10 px-6">
-            <button onClick={() => setIsShareOpen(!isShareOpen)} className="px-5 py-2.5 bg-[#6c5ce7] text-white rounded-xl text-[13px] font-black shadow-lg">🔗 공유하기</button>
-            <button onClick={() => router.push('/join')} className="px-5 py-2.5 bg-white text-slate-500 border border-slate-100 rounded-xl text-[13px] font-black">👤+ 나도 참여</button>
+          {/* 주요 버튼 그룹 */}
+          <div className="flex gap-2 mb-10 px-6 relative">
+            <div className="relative">
+              <button onClick={() => setIsShareOpen(!isShareOpen)} className="px-5 py-2.5 bg-[#6c5ce7] text-white rounded-xl text-[13px] font-black shadow-lg flex items-center gap-1.5 active:scale-95 transition-all">
+                <span>🔗</span> 공유하기
+              </button>
+              <AnimatePresence>
+                {isShareOpen && (
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute top-12 left-0 w-[180px] bg-white rounded-2xl shadow-2xl border border-slate-50 z-[60] p-2">
+                    <button onClick={handleCopyLink} className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors text-left font-bold text-slate-600 text-[13px]">
+                      📋 링크 복사
+                    </button>
+                    <button onClick={handleShareLink} className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors text-left font-bold text-slate-600 text-[13px]">
+                      🔗 링크 공유
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            <button onClick={() => router.push('/join')} className="px-5 py-2.5 bg-white text-slate-500 border border-slate-100 rounded-xl text-[13px] font-black hover:bg-slate-50 transition-all">👤+ 나도 참여</button>
             <button onClick={() => { localStorage.clear(); router.push('/create-group'); }} className="px-5 py-2.5 bg-[#f3f0ff] text-[#6c5ce7] rounded-xl text-[13px] font-black hover:bg-[#ebe5ff] transition-all">+ 새 모임 만들기</button>
           </div>
 
@@ -83,7 +118,7 @@ export default function GroupDetail() {
             <div className="flex-1 text-center pb-4 text-[15px] font-black border-b-2 border-slate-800 text-slate-800">궁합</div>
           </div>
 
-          {/* 네트워크 다이어그램 */}
+          {/* 다인원 네트워크 맵 */}
           <div className="w-full px-8 flex flex-col items-center">
             <div className="relative w-full aspect-square max-w-[320px] flex justify-center items-center">
               <svg className="absolute inset-0 w-full h-full pointer-events-none">
@@ -112,22 +147,22 @@ export default function GroupDetail() {
             </div>
           </div>
 
+          {/* 상세 리포트 카드 (방장 이름 연동 확인) */}
           <section className="w-full px-6 mt-16 space-y-6">
             {members.map((m) => (
               <div key={m.id} className={`bg-[#fcfcfd] rounded-[35px] p-8 border shadow-sm ${selectedMemberId === m.id ? 'border-[#6c5ce7]' : 'border-slate-100'}`}>
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-sm border border-slate-50">{m.emoji}</div>
                   <div>
-                    {/* 수정사항 2: 방장이 아닌 실제 이름 반영 [cite: 2026-02-16] */}
                     <p className="text-[17px] font-black text-slate-800">{m.name}</p>
-                    <p className="text-[12px] text-slate-400 font-bold">{m.ilju} - <span className="text-[#6c5ce7]">{m.element}의 기운</span></p>
+                    <p className="text-[12px] text-slate-400 font-bold uppercase pt-1">{m.ilju} - <span className="text-[#6c5ce7]">{m.element}의 기운</span></p>
                   </div>
                 </div>
                 <p className="text-[14px] text-slate-500 leading-8 font-medium break-keep">{m.desc}</p>
               </div>
             ))}
 
-            {/* --- 수정사항 3: 상세 가이드 아코디언 (내용 강화 복구) --- */}
+            {/* --- 수정사항 3: 일주 아코디언 가이드 (상세 내용 강화) --- */}
             <div className="pt-20 space-y-6">
               <h2 className="text-[18px] font-black text-slate-800 flex items-center gap-2 px-2">
                 <span className="text-[#6c5ce7]">🔮</span> 일주로 보는 궁합이란?
@@ -147,7 +182,7 @@ export default function GroupDetail() {
                 },
                 { 
                   q: "우리 사이에서 알 수 있는 것", 
-                  a: "멤버 간의 1:1 케미 등급과 관계의 특징, 그리고 전체 모임의 조화도를 시각적인 네트워크 그래프로 확인할 수 있습니다. 전통적인 사주를 현대적인 네트워크로 만나보세요! [cite: 2026-02-16]" 
+                  a: "멤버 간의 1:1 케미 등급과 관계의 특징, 그리고 전체 모임의 조화도를 시각적인 네트워크 그래프로 확인할 수 있습니다. [cite: 2026-02-16]" 
                 }
               ].map((item, idx) => (
                 <div key={idx} className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
