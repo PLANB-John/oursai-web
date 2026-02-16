@@ -15,7 +15,7 @@ export default function GroupDetail() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-32">
         
-        {/* --- 1. 상단 헤더 (레퍼런스 100% 일치) --- */}
+        {/* --- 1. 상단 헤더 --- */}
         <div className="px-6 py-6 flex items-center justify-between">
           <button onClick={() => router.push('/')} className="text-[13px] text-slate-400 font-bold flex items-center gap-1">
             ← 우리 사이
@@ -24,7 +24,6 @@ export default function GroupDetail() {
         </div>
 
         <main className="flex-1 flex flex-col items-center pt-8">
-          {/* 그룹 타이틀 및 참여 인원 */}
           <div className="text-center space-y-1 mb-8">
             <h1 className="text-[28px] font-black text-slate-800 tracking-tight flex items-center justify-center gap-1">
               대학동기들 <span className="text-slate-200 text-[18px]">⚙️</span>
@@ -32,7 +31,6 @@ export default function GroupDetail() {
             <p className="text-[14px] text-slate-400 font-bold">1명 참여 중</p>
           </div>
 
-          {/* 주요 액션 버튼 그룹 */}
           <div className="flex gap-2 mb-12 px-6">
             <button className="px-6 py-2.5 bg-[#9b59b6] text-white rounded-full text-[13px] font-black shadow-lg shadow-purple-100 flex items-center gap-1.5 active:scale-95 transition-all">
               <span>🔗</span> 공유하기
@@ -45,7 +43,6 @@ export default function GroupDetail() {
             </button>
           </div>
 
-          {/* 상단 탭 메뉴 (궁합 / 오늘의 일진) */}
           <div className="w-full flex border-b border-slate-50 mb-10 px-2">
             <button 
               onClick={() => setActiveTab('궁합')}
@@ -61,12 +58,15 @@ export default function GroupDetail() {
             </button>
           </div>
 
-          {/* --- 2. 캐릭터 애니메이션 섹션 (영상 디자인 반영) --- */}
+          {/* --- 2. 캐릭터 애니메이션 (글로우 효과 추가) --- */}
           <div className="relative w-full h-[300px] flex justify-center items-center">
+            {/* 배경 글로우 - 레퍼런스의 몽글몽글한 느낌 재현 */}
+            <div className="absolute w-40 h-40 bg-purple-100 rounded-full blur-[60px] opacity-40"></div>
+            
             <motion.div 
               animate={{ y: [0, -15, 0] }} 
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="flex flex-col items-center gap-3"
+              className="flex flex-col items-center gap-3 relative z-10"
             >
               <div className="w-24 h-24 bg-white rounded-[32px] shadow-2xl flex items-center justify-center text-5xl border border-slate-50">
                 🐵
@@ -87,16 +87,17 @@ export default function GroupDetail() {
                 <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-sm">🐵</div>
                 <div>
                   <p className="text-[16px] font-black text-slate-800 leading-tight">김기리</p>
-                  <p className="text-[12px] text-slate-400 font-bold uppercase tracking-tighter pt-0.5">경신 - 🔥 금</p>
+                  <p className="text-[12px] text-slate-400 font-bold uppercase tracking-tighter pt-0.5">
+                    경신 - <span className="text-[#9b59b6]">금(金)의 기운</span>
+                  </p>
                 </div>
               </div>
-              <p className="text-[14px] text-slate-500 leading-8 font-medium">
+              <p className="text-[14px] text-slate-500 leading-8 font-medium break-keep">
                 날카로운 지혜가 돋보이며 상황 판단이 빠르고 결단력이 뛰어나 다양한 문제를 해결하는 데 능숙해. 새로운 아이디어로 주변을 놀라게 하는 창의적인 면모와 유연함도 갖춘 매력적인 타입이야.
               </p>
             </motion.div>
           </section>
 
-          {/* 링크 공유 유도 문구 */}
           <div className="mt-12 text-center space-y-3">
             <p className="text-[13px] font-bold text-slate-300">링크를 공유해서 친구를 초대하세요</p>
             <button className="text-[14px] font-black text-[#9b59b6] flex items-center justify-center gap-1 mx-auto bg-purple-50 px-4 py-2 rounded-full">
@@ -105,14 +106,14 @@ export default function GroupDetail() {
           </div>
         </main>
 
-        {/* --- 4. 하단 플로팅 액션 버튼 (나도 참여하기) --- */}
+        {/* --- 4. 하단 플로팅 버튼 --- */}
         <div className="fixed bottom-10 left-1/2 -translate-x-1/2 w-full max-w-[440px] px-6 z-50">
           <button className="w-full py-6 bg-white border-2 border-[#9b59b6] text-[#9b59b6] rounded-[28px] font-black text-[18px] shadow-2xl flex items-center justify-center gap-2 hover:bg-purple-50 active:scale-95 transition-all">
             <span>✨</span> 나도 참여하기
           </button>
         </div>
 
-        {/* --- 5. 최종 푸터 --- */}
+        {/* --- 5. 최종 푸터 (이용약관 및 방침 필수 포함) --- */}
         <footer className="px-8 py-20 bg-white text-center space-y-10 border-t border-slate-50 mt-20">
           <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold">
             <a href="/terms" className="hover:text-purple-400">이용약관</a>
