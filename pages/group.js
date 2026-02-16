@@ -9,25 +9,39 @@ export default function GroupDetail() {
   const [openAccordion, setOpenAccordion] = useState(0);
   const [selectedMemberId, setSelectedMemberId] = useState(null);
   const [members, setMembers] = useState([]);
+  const [groupName, setGroupName] = useState(''); // 1. 모임 이름 상태 추가 [cite: 2026-02-16]
 
-  // 1. 데이터 로드 로직: 저장소에서 실제 인원만 불러옴 [cite: 2026-02-16]
+  // 데이터 로드 로직: 저장소에서 모임 이름과 실제 인원을 불러옴 [cite: 2026-02-16]
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('groupMembers') || '[]');
+    if (!router.isReady) return;
+
+    // 모임 이름 로드 (없으면 기본값) [cite: 2026-02-16]
+    const savedGroupName = localStorage.getItem('currentGroupName') || '우리 모임';
+    setGroupName(savedGroupName);
+
+    const savedMembers = JSON.parse(localStorage.getItem('groupMembers') || '[]');
     
-    // 데이터가 아예 없으면 방장(1명)으로 초기화
-    if (saved.length === 0) {
+    // 데이터가 아예 없으면 (방금 생성한 경우) 방장 정보 생성 [cite: 2026-02-16]
+    if (savedMembers.length === 0) {
+      const savedLeaderName = localStorage.getItem('currentUserName') || '방장'; // 2. 입력한 이름 반영 [cite: 2026-02-16]
       const initialLeader = [{ 
-        id: 0, name: '방장', emoji: '🐔', ilju: '신유', element: '금(金)', 
-        desc: '모임의 중심을 잡아주는 리더입니다.', color: '#3b82f6' 
+        id: 0, 
+        name: savedLeaderName, 
+        emoji: '🐔', 
+        ilju: '신유', 
+        element: '금(金)', 
+        desc: '모임의 중심을 잡아주는 리더입니다. 상황 판단이 빠르고 결단력이 뛰어납니다.', 
+        color: '#3b82f6' 
       }];
       localStorage.setItem('groupMembers', JSON.stringify(initialLeader));
       setMembers(initialLeader);
     } else {
-      setMembers(saved); // 저장된 만큼만 보여줌 (2명, 3명...)
+      setMembers(savedMembers);
     }
-  }, []);
+  }, [router.isReady]);
 
-  // 2. 다각형 좌표 계산 (최대 12명)
+  const hasJoined = members.length >= 2;
+
   const getCoordinates = (index, total) => {
     if (total === 1) return { x: 0, y: 0 };
     if (total === 2) return { x: 0, y: index === 0 ? -90 : 90 };
@@ -38,7 +52,7 @@ export default function GroupDetail() {
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] flex justify-center items-start sm:py-10 font-sans text-slate-800">
-      <Head><title>우리 사이 | 모임 궁합 결과</title></Head>
+      <Head><title>{groupName} | 우리 사이 (oursai.kr)</title></Head>
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-40">
         
@@ -52,17 +66,17 @@ export default function GroupDetail() {
 
         <main className="flex-1 flex flex-col items-center">
           <div className="text-center mt-8 mb-8">
+            {/* 수정사항 1: 동적 모임 이름 반영 [cite: 2026-02-16] */}
             <h1 className="text-[26px] font-black text-slate-800 tracking-tight flex items-center justify-center gap-1">
-              대학 동기들 <span className="text-slate-200 text-lg">⚙️</span>
+              {groupName} <span className="text-slate-200 text-lg">⚙️</span>
             </h1>
             <p className="text-[14px] text-slate-400 font-bold mt-1">{members.length}명 참여 중</p>
           </div>
 
-          {/* 버튼 그룹 */}
           <div className="flex gap-2 mb-10 px-6">
             <button onClick={() => setIsShareOpen(!isShareOpen)} className="px-5 py-2.5 bg-[#6c5ce7] text-white rounded-xl text-[13px] font-black shadow-lg">🔗 공유하기</button>
             <button onClick={() => router.push('/join')} className="px-5 py-2.5 bg-white text-slate-500 border border-slate-100 rounded-xl text-[13px] font-black">👤+ 나도 참여</button>
-            <button onClick={() => { localStorage.removeItem('groupMembers'); router.push('/create-group'); }} className="px-5 py-2.5 bg-[#f3f0ff] text-[#6c5ce7] rounded-xl text-[13px] font-black">+ 새 모임 만들기</button>
+            <button onClick={() => { localStorage.clear(); router.push('/create-group'); }} className="px-5 py-2.5 bg-[#f3f0ff] text-[#6c5ce7] rounded-xl text-[13px] font-black hover:bg-[#ebe5ff] transition-all">+ 새 모임 만들기</button>
           </div>
 
           <div className="w-full flex border-b border-slate-50 mb-10">
@@ -98,13 +112,13 @@ export default function GroupDetail() {
             </div>
           </div>
 
-          {/* 상세 분석 섹션 */}
           <section className="w-full px-6 mt-16 space-y-6">
             {members.map((m) => (
               <div key={m.id} className={`bg-[#fcfcfd] rounded-[35px] p-8 border shadow-sm ${selectedMemberId === m.id ? 'border-[#6c5ce7]' : 'border-slate-100'}`}>
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-sm border border-slate-50">{m.emoji}</div>
                   <div>
+                    {/* 수정사항 2: 방장이 아닌 실제 이름 반영 [cite: 2026-02-16] */}
                     <p className="text-[17px] font-black text-slate-800">{m.name}</p>
                     <p className="text-[12px] text-slate-400 font-bold">{m.ilju} - <span className="text-[#6c5ce7]">{m.element}의 기운</span></p>
                   </div>
@@ -113,34 +127,60 @@ export default function GroupDetail() {
               </div>
             ))}
 
-            {/* 하단 상세 아코디언 가이드 */}
+            {/* --- 수정사항 3: 상세 가이드 아코디언 (내용 강화 복구) --- */}
             <div className="pt-20 space-y-6">
-              <h2 className="text-[18px] font-black text-slate-800 px-2">🔮 일주로 보는 궁합이란?</h2>
-              {[ 
-                { q: "일주가 뭐예요?", a: "일주(日柱)는 태어난 '날'의 기운을 나타내는 사주의 핵심 요소예요." }, 
-                { q: "띠랑 뭐가 달라요?", a: "띠는 태어난 해, 일주는 태어난 날 기준입니다. 나 자신의 본질적인 기운을 보기에 더 적합합니다." },
-                { q: "왜 일주로 궁합을 봐요?", a: "나의 본질적인 성향을 가장 잘 나타내기 때문입니다. [cite: 2026-02-16]" },
-                { q: "우리 사이에서 알 수 있는 것", a: "멤버 간의 1:1 케미 등급과 관계 네트워크를 볼 수 있습니다. [cite: 2026-02-16]" }
+              <h2 className="text-[18px] font-black text-slate-800 flex items-center gap-2 px-2">
+                <span className="text-[#6c5ce7]">🔮</span> 일주로 보는 궁합이란?
+              </h2>
+              {[
+                { 
+                  q: "일주가 뭐예요?", 
+                  a: "일주(日柱)는 태어난 '날'의 기운을 나타내는 사주의 핵심 요소예요. 사주명리학에서 일주는 '나 자신'을 가장 잘 표현하는 부분으로, 성격, 기질, 내면의 스타일을 담고 있어요." 
+                },
+                { 
+                  q: "띠랑 뭐가 달라요?", 
+                  a: "띠는 태어난 해(년)를 기준으로 하지만, 일주는 태어난 날을 기준으로 합니다. 띠가 사회적인 겉모습이라면, 일주는 나 자신의 본질적인 기운과 속마음을 보기에 더 적합합니다." 
+                },
+                { 
+                  q: "왜 일주로 궁합을 봐요?", 
+                  a: "일주는 개인의 기질과 내면 에너지를 가장 정확하게 담고 있어, 서로 다른 두 사람이 만났을 때 생기는 화학 반응을 깊이 있게 분석할 수 있습니다. [cite: 2026-02-16]" 
+                },
+                { 
+                  q: "우리 사이에서 알 수 있는 것", 
+                  a: "멤버 간의 1:1 케미 등급과 관계의 특징, 그리고 전체 모임의 조화도를 시각적인 네트워크 그래프로 확인할 수 있습니다. 전통적인 사주를 현대적인 네트워크로 만나보세요! [cite: 2026-02-16]" 
+                }
               ].map((item, idx) => (
                 <div key={idx} className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
                   <button onClick={() => setOpenAccordion(openAccordion === idx ? null : idx)} className="w-full p-6 flex justify-between items-center text-left">
                     <span className="text-[14px] font-bold text-slate-700">{item.q}</span>
                     <span className={`text-slate-300 transition-transform ${openAccordion === idx ? 'rotate-180' : ''}`}>▼</span>
                   </button>
-                  {openAccordion === idx && <div className="px-6 pb-6 text-[13px] text-slate-500 leading-7 border-t border-slate-50 pt-4">{item.a}</div>}
+                  <AnimatePresence>
+                    {openAccordion === idx && (
+                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="px-6 pb-6 text-[13px] text-slate-500 leading-7 border-t border-slate-50 pt-4">
+                        {item.a}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ))}
             </div>
           </section>
         </main>
 
-        {/* 5종 푸터 링크 */}
+        {/* --- 수정사항 4: 하단 표준 푸터 (5종 링크 완벽 복구) --- */}
         <footer className="px-8 py-20 bg-white text-center border-t border-slate-50 mt-10">
           <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold mb-4">
-            <a href="/intro">서비스 소개</a><span>|</span><a href="/faq">자주 묻는 질문</a><span>|</span><a href="/feedback">의견 보내기</a>
+            <a href="/intro" className="hover:text-purple-400">서비스 소개</a>
+            <span className="text-slate-100">|</span>
+            <a href="/faq" className="hover:text-purple-400">자주 묻는 질문</a>
+            <span className="text-slate-100">|</span>
+            <a href="/feedback" className="hover:text-purple-400">의견 보내기</a>
           </div>
           <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold mb-8">
-            <a href="/terms">이용약관</a><span>|</span><a href="/privacy">개인정보처리방침</a>
+            <a href="/terms" className="hover:text-purple-400">이용약관</a>
+            <span className="text-slate-100">|</span>
+            <a href="/privacy" className="hover:text-purple-400">개인정보처리방침</a>
           </div>
           <p className="text-[11px] text-slate-200 font-medium italic">© 2026 oursai.kr | All Rights Reserved.</p>
         </footer>
