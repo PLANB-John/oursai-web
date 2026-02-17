@@ -150,8 +150,8 @@ export default function Home() {
         </section>
 
         {/* --- [수정] 구글 애드센스 광고 영역 (모바일 대응 초슬림 버전) [cite: 2026-02-17] --- */}
-        <section className="px-8 py-0.5"> {/* 여백 최소화 (py-1 -> py-0.5) [cite: 2026-02-17] */}
-          <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[50px]">
+        <section className="px-8 py-2"> {/* 여백 최소화 (py-1 -> py-0.5) [cite: 2026-02-17] */}
+          <div className="w-full bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden min-h-[100px] flex items-center justify-center">
             {/* min-h를 100px에서 50px로 줄여 모바일에서의 과한 공간 점유를 방지합니다. [cite: 2026-02-17] */}
             <AdUnit />
           </div>
