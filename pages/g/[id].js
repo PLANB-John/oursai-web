@@ -121,10 +121,11 @@ export default function DynamicGroupDetail() {
       {/* --- [신규] 카톡 공유용 미리보기(Open Graph) 설정 [cite: 2026-02-18] --- */}
       <Head>
         <title>우리 사이 | 우리 사이 운명일까?</title>
-        <meta property="og:title" content="우리 사이 | 사주로 잇다" />
+        <meta property="og:title" content={`${groupData.groupName} | 우리사이`} />
         <meta property="og:description" content="친구, 동료, 가족과 함께 사주 궁합을 확인해보세요!" />
-        <meta property="og:image" content="https://oursai.kr/og-image.png" />
-        <meta property="og:url" content="https://oursai.kr" />
+        <meta property="og:image" content="https://oursai.kr/og-image.png" /> {/* [!] /public 폴더에 이미지를 꼭 업로드하세요 */}
+        <meta property="og:url" content={`https://oursai.kr/g/${id}`} />
+        <meta property="og:type" content="website" />
       </Head>
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-40">
