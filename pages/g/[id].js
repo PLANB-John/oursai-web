@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { supabase } from '../../lib/supabaseClient'; // [1] 서버 연결 열쇠 활성화 [cite: 2026-02-17]
+import { supabase } from '../../lib/supabaseClient'; // 서버 연결 열쇠 [cite: 2026-02-17]
+import AdUnit from '../../components/AdUnit'; // [1] 광고 컴포넌트 불러오기 (경로 주의) [cite: 2026-02-18]
 
 export default function DynamicGroupDetail() {
   const router = useRouter();
@@ -30,12 +31,11 @@ export default function DynamicGroupDetail() {
     worst: { label: '최악조합', color: '#ef4444', score: 24 }
   };
 
-  // 2. [서버 연동] 데이터 로드 로직 (Supabase 기반으로 변경) [cite: 2026-02-17]
+  // 2. 서버 연동 데이터 로드 로직 [cite: 2026-02-17]
   useEffect(() => {
     if (!router.isReady || !id) return;
 
     const fetchRoomData = async () => {
-      // localStorage 대신 Supabase 서버에서 데이터를 가져옵니다. [cite: 2026-02-17]
       const { data, error } = await supabase
         .from('rooms')
         .select('*')
@@ -48,13 +48,11 @@ export default function DynamicGroupDetail() {
         return;
       }
 
-      // 가져온 멤버들에게 분석 데이터 입히기 [cite: 2026-02-17]
       const enhancedMembers = data.members.map((m, idx) => ({
         ...m,
         ...analysisPool[idx % analysisPool.length]
       }));
 
-      // group_name 등 서버 컬럼명에 맞춰 데이터 설정 [cite: 2026-02-17]
       setGroupData({ 
         groupName: data.group_name || '우리 모임', 
         members: enhancedMembers 
@@ -64,7 +62,6 @@ export default function DynamicGroupDetail() {
     fetchRoomData();
   }, [router.isReady, id]);
 
-  // 관계 및 점수 계산 로직 [기존 유지]
   const getRelation = (idx1, idx2) => {
     const diff = Math.abs(idx1 - idx2);
     const types = Object.values(relTypes);
@@ -190,6 +187,8 @@ export default function DynamicGroupDetail() {
                 );
               })}
             </div>
+
+            {/* 범례 표시 영역 */}
             <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-10 py-6 border-t border-slate-50 w-full">
               {Object.values(relTypes).map((rel, i) => (
                 <div key={i} className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400">
@@ -197,6 +196,13 @@ export default function DynamicGroupDetail() {
                 </div>
               ))}
             </div>
+
+            {/* [신규 광고 1] 5가지 조합(범례) 바로 밑 [cite: 2026-02-18] */}
+            <section className="w-full px-2 py-4">
+              <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[60px]">
+                <AdUnit />
+              </div>
+            </section>
           </div>
 
           <section className="w-full px-6 mt-10 space-y-6">
@@ -209,6 +215,13 @@ export default function DynamicGroupDetail() {
                 <p className="text-[15px] text-slate-500 leading-8 font-medium break-keep">{m.desc}</p>
               </div>
             ))}
+
+            {/* [신규 광고 2] 아코디언 가이드 바로 위 [cite: 2026-02-18] */}
+            <section className="w-full py-6">
+              <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[60px]">
+                <AdUnit />
+              </div>
+            </section>
 
             <div className="pt-20 space-y-6 mb-20">
               <h2 className="text-[18px] font-black text-slate-800 flex items-center gap-2 px-2"><span className="text-[#6c5ce7]">🔮</span> 일주로 보는 궁합이란?</h2>
