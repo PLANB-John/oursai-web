@@ -94,7 +94,7 @@ export default function CreateGroup() {
             <p className="text-[14px] text-slate-400 font-medium">모임을 만들고, 멤버들의 궁합을 확인해보세요</p>
           </div>
 
-          {/* [2] 상단 광고 영역 (모임 이름 입력창 바로 위) [cite: 2026-02-18] */}
+          {/* [1] 상단 광고 영역 (모임 이름 입력창 바로 위) [cite: 2026-02-18] */}
           <section className="px-2 py-1">
             <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[60px]">
               <AdUnit />
@@ -156,12 +156,6 @@ export default function CreateGroup() {
                   {openAccordion === idx && (
                     <div className="px-6 pb-6 text-[13px] text-slate-500 leading-7 border-t border-slate-50 pt-4">
                       {item.a}
-                      {/* [3] 하단 광고 영역 (아코디언 마지막 항목 '우리 사이에서 알 수 있는 것' 바로 밑) [cite: 2026-02-18] */}
-                      {idx === 3 && (
-                        <div className="mt-6 pt-6 border-t border-slate-50">
-                          <AdUnit />
-                        </div>
-                      )}
                     </div>
                   )}
                 </div>
@@ -170,7 +164,14 @@ export default function CreateGroup() {
           </section>
         </main>
 
-        <footer className="px-8 py-20 bg-white text-center border-t border-slate-50 mt-10">
+        {/* [2] 하단 광고 영역 (아코디언 가이드 끝과 푸터 사이) [cite: 2026-02-18] */}
+        <section className="px-8 py-2">
+          <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[60px]">
+            <AdUnit />
+          </div>
+        </section>
+
+        <footer className="px-8 py-20 bg-white text-center border-t border-slate-50">
           <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold mb-4">
             <a href="/intro">서비스 소개</a><span>|</span><a href="/faq">자주 묻는 질문</a><span>|</span><a href="/feedback">의견 보내기</a>
           </div>
