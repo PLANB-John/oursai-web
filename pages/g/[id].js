@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { supabase } from '../../lib/supabaseClient'; // 서버 연결
-import AdUnit from '../../components/AdUnit'; // 광고 컴포넌트
+import { supabase } from '../../lib/supabaseClient'; // 서버 연결 열쇠 [cite: 2026-02-17]
+import AdUnit from '../../components/AdUnit'; // 광고 컴포넌트 불러오기 [cite: 2026-02-18]
 
 export default function DynamicGroupDetail() {
   const router = useRouter();
@@ -14,7 +14,7 @@ export default function DynamicGroupDetail() {
   const [selectedMemberId, setSelectedMemberId] = useState(null);
   const [groupData, setGroupData] = useState(null);
 
-  // 1. 일주 및 분석 데이터 풀
+  // 1. 일주 및 분석 데이터 풀 (유지)
   const analysisPool = [
     { ilju: '경신', element: '금(金)', desc: '날카로운 지혜가 돋보이며 상황 판단이 빠르고 결단력이 뛰어납니다. 새로운 아이디어로 주변을 놀라게 하는 창의적인 면모를 갖춘 매력적인 타입이에요.' },
     { ilju: '병인', element: '화(火)', desc: '열정적이고 에너지가 넘치며 추진력이 강합니다. 주변 사람들에게 밝은 기운을 전달하며 리더십을 발휘하여 모임의 분위기를 주도하는 스타일입니다.' },
@@ -31,7 +31,7 @@ export default function DynamicGroupDetail() {
     worst: { label: '최악조합', color: '#ef4444', score: 24 }
   };
 
-  // 2. 서버 데이터 로드
+  // 2. 서버 연동 데이터 로드 로직 (유지)
   useEffect(() => {
     if (!router.isReady || !id) return;
 
@@ -88,21 +88,21 @@ export default function DynamicGroupDetail() {
     return { x: centerX + radius * Math.cos(angle), y: centerY + radius * Math.sin(angle) };
   };
 
-  // --- [수정] 링크 복사 기능: www. 를 포함한 고유 주소로 고정 [cite: 2026-02-18] ---
+  // --- [수정] 링크 복사: index.js에서 성공한 주소 체계(non-www)로 통일 [cite: 2026-02-18] ---
   const handleCopyLink = () => {
-    const shareUrl = `https://www.oursai.kr/g/${id}`;
+    const shareUrl = `https://oursai.kr/g/${id}`;
     navigator.clipboard.writeText(shareUrl);
     alert("링크가 복사되었습니다!");
     setIsShareOpen(false);
   };
 
-  // --- [수정] 공유 기능: www. 주소 및 요청 문구 적용 [cite: 2026-02-18] ---
+  // --- [수정] 공유 기능: 요청하신 문구 적용 및 이모지 제거 [cite: 2026-02-18] ---
   const handleShareLink = async () => {
-    const shareUrl = `https://www.oursai.kr/g/${id}`;
+    const shareUrl = `https://oursai.kr/g/${id}`;
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${groupData.groupName} ㅣ 우리 사이`,
+          title: `${groupData ? groupData.groupName : '우리 모임'} ㅣ 우리 사이`,
           text: '우리 사이의 사주 궁합을 확인해보세요!', 
           url: shareUrl,
         });
@@ -121,22 +121,15 @@ export default function DynamicGroupDetail() {
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] flex justify-center items-start sm:py-10 font-sans text-slate-800">
-      {/* --- [수정] 카톡 공유용 미리보기(Open Graph) 설정 완벽 구현 [cite: 2026-02-18] --- */}
+      {/* --- [분석 완료] index.js의 성공 방식을 이식하되, 제목만 동적으로 처리합니다 [cite: 2026-02-18] --- */}
       <Head>
-        {/* 브라우저 탭 제목 */}
-        <title>{groupData.groupName} ㅣ 우리 사이</title>
-  
-        {/* [핵심] 카톡 미리보기 제목: '모임 이름 ㅣ 우리 사이' [cite: 2026-02-18] */}
-        <meta property="og:title" content={`${groupData.groupName} ㅣ 우리 사이`} />
-  
-        {/* 미리보기 설명 문구 [cite: 2026-02-18] */}
+        <title>{groupData ? groupData.groupName : '우리 모임'} ㅣ 우리 사이</title>
+        <meta property="og:title" content={`${groupData ? groupData.groupName : '우리 모임'} ㅣ 우리 사이`} />
         <meta property="og:description" content="친구, 동료, 가족과 함께 사주 궁합을 확인해보세요!" />
-  
-        {/* 업로드한 이미지 주소 (절대 경로 및 www 포함) [cite: 2026-02-18] */}
-        <meta property="og:image" content="https://www.oursai.kr/og-image.png" />
-  
-        {/* 현재 페이지 주소 (www 포함 고정) [cite: 2026-02-18] */}
-        <meta property="og:url" content={`https://www.oursai.kr/g/${id}`} />
+        {/* 성공한 index.js와 동일한 이미지 경로 사용 [cite: 2026-02-18] */}
+        <meta property="og:image" content="https://oursai.kr/og-image.png" />
+        {/* 성공한 index.js와 동일한 oursai.kr 도메인 체계 사용 [cite: 2026-02-18] */}
+        <meta property="og:url" content={`https://oursai.kr/g/${id}`} />
         <meta property="og:type" content="website" />
       </Head>
 
