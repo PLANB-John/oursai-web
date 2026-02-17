@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { supabase } from '../../lib/supabaseClient'; // 서버 연결 열쇠 [cite: 2026-02-17]
-import AdUnit from '../../components/AdUnit'; // 광고 컴포넌트 불러오기 [cite: 2026-02-18]
+import { supabase } from '../../lib/supabaseClient'; // 서버 연결
+import AdUnit from '../../components/AdUnit'; // 광고 컴포넌트
 
 export default function DynamicGroupDetail() {
   const router = useRouter();
@@ -31,7 +31,7 @@ export default function DynamicGroupDetail() {
     worst: { label: '최악조합', color: '#ef4444', score: 24 }
   };
 
-  // 2. 서버 연동 데이터 로드 로직
+  // 2. 서버 데이터 로드
   useEffect(() => {
     if (!router.isReady || !id) return;
 
@@ -88,22 +88,23 @@ export default function DynamicGroupDetail() {
     return { x: centerX + radius * Math.cos(angle), y: centerY + radius * Math.sin(angle) };
   };
 
+  // --- [수정] 링크 복사 기능: www. 를 포함한 고유 주소로 고정 [cite: 2026-02-18] ---
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
+    const shareUrl = `https://www.oursai.kr/g/${id}`;
+    navigator.clipboard.writeText(shareUrl);
     alert("링크가 복사되었습니다!");
     setIsShareOpen(false);
   };
 
-  // --- [수정] 공유 기능: 요청하신 문구 적용 및 이모지 제거 [cite: 2026-02-18] ---
+  // --- [수정] 공유 기능: www. 주소 및 요청 문구 적용 [cite: 2026-02-18] ---
   const handleShareLink = async () => {
+    const shareUrl = `https://www.oursai.kr/g/${id}`;
     if (navigator.share) {
       try {
         await navigator.share({
-          // 공유 창 제목
           title: `${groupData.groupName} ㅣ 우리 사이`,
-          // 전송되는 메시지 (이모지 제거됨) [cite: 2026-02-18]
           text: '우리 사이의 사주 궁합을 확인해보세요!', 
-          url: window.location.href,
+          url: shareUrl,
         });
         setIsShareOpen(false);
       } catch (err) {
@@ -124,13 +125,17 @@ export default function DynamicGroupDetail() {
       <Head>
         {/* 브라우저 탭 제목 */}
         <title>{groupData.groupName} ㅣ 우리 사이</title>
-        {/* SNS 미리보기 제목: '모임 이름 ㅣ 우리 사이' [cite: 2026-02-18] */}
+  
+        {/* [핵심] 카톡 미리보기 제목: '모임 이름 ㅣ 우리 사이' [cite: 2026-02-18] */}
         <meta property="og:title" content={`${groupData.groupName} ㅣ 우리 사이`} />
+  
         {/* 미리보기 설명 문구 [cite: 2026-02-18] */}
         <meta property="og:description" content="친구, 동료, 가족과 함께 사주 궁합을 확인해보세요!" />
-        {/* 이미지 주소 (절대 경로) [cite: 2026-02-18] */}
+  
+        {/* 업로드한 이미지 주소 (절대 경로 및 www 포함) [cite: 2026-02-18] */}
         <meta property="og:image" content="https://www.oursai.kr/og-image.png" />
-        {/* 현재 페이지 주소 (각 모임 고유 주소) [cite: 2026-02-18] */}
+  
+        {/* 현재 페이지 주소 (www 포함 고정) [cite: 2026-02-18] */}
         <meta property="og:url" content={`https://www.oursai.kr/g/${id}`} />
         <meta property="og:type" content="website" />
       </Head>
