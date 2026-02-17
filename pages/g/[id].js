@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
+import { supabase } from '../../lib/supabaseClient'; // [1] 서버 연결 열쇠 활성화 [cite: 2026-02-17]
 
 export default function DynamicGroupDetail() {
   const router = useRouter();
-  const { id } = router.query; // 주소창의 고유 ID (예: lxddOVWl) 추출 [cite: 2026-02-17]
+  const { id } = router.query;
   
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [openAccordion, setOpenAccordion] = useState(0);
@@ -29,26 +30,41 @@ export default function DynamicGroupDetail() {
     worst: { label: '최악조합', color: '#ef4444', score: 24 }
   };
 
-  // 2. 데이터 로드 로직 (ID 기반) [cite: 2026-02-17]
+  // 2. [서버 연동] 데이터 로드 로직 (Supabase 기반으로 변경) [cite: 2026-02-17]
   useEffect(() => {
     if (!router.isReady || !id) return;
 
-    const saved = localStorage.getItem(`room_${id}`);
-    if (saved) {
-      const parsedData = JSON.parse(saved);
-      // 저장된 멤버들에게 분석 데이터 입히기
-      const enhancedMembers = parsedData.members.map((m, idx) => ({
+    const fetchRoomData = async () => {
+      // localStorage 대신 Supabase 서버에서 데이터를 가져옵니다. [cite: 2026-02-17]
+      const { data, error } = await supabase
+        .from('rooms')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error || !data) {
+        alert("존재하지 않는 모임입니다.");
+        router.push('/');
+        return;
+      }
+
+      // 가져온 멤버들에게 분석 데이터 입히기 [cite: 2026-02-17]
+      const enhancedMembers = data.members.map((m, idx) => ({
         ...m,
         ...analysisPool[idx % analysisPool.length]
       }));
-      setGroupData({ ...parsedData, members: enhancedMembers });
-    } else {
-      alert("존재하지 않는 모임입니다.");
-      router.push('/');
-    }
+
+      // group_name 등 서버 컬럼명에 맞춰 데이터 설정 [cite: 2026-02-17]
+      setGroupData({ 
+        groupName: data.group_name || '우리 모임', 
+        members: enhancedMembers 
+      });
+    };
+
+    fetchRoomData();
   }, [router.isReady, id]);
 
-  // 관계 및 점수 계산 로직 [cite: 2026-02-17]
+  // 관계 및 점수 계산 로직 [기존 유지]
   const getRelation = (idx1, idx2) => {
     const diff = Math.abs(idx1 - idx2);
     const types = Object.values(relTypes);
@@ -81,7 +97,7 @@ export default function DynamicGroupDetail() {
     setIsShareOpen(false);
   };
 
-  if (!groupData) return <div className="min-h-screen bg-white flex items-center justify-center font-black">데이터를 불러오는 중...</div>;
+  if (!groupData) return <div className="min-h-screen bg-white flex items-center justify-center font-black">데이터를 서버에서 불러오는 중...</div>;
 
   const dynamicScore = calculateTotalScore();
 
@@ -91,7 +107,6 @@ export default function DynamicGroupDetail() {
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-40">
         
-        {/* 상단 네비게이션 */}
         <div className="px-6 py-6 flex items-center justify-between border-b border-slate-50">
           <button onClick={() => router.push('/')} className="text-[14px] text-slate-400 font-bold flex items-center gap-1">‹ 우리 사이</button>
           <div className="text-slate-300 cursor-pointer text-xl">⚙️</div>
@@ -105,7 +120,6 @@ export default function DynamicGroupDetail() {
             <p className="text-[14px] text-slate-400 font-bold mt-1">{groupData.members.length}명 참여 중</p>
           </div>
 
-          {/* 모바일 최적화 버튼 레이아웃 */}
           <div className="w-full px-6 mb-10">
             <div className="grid grid-cols-2 gap-2">
               <div className="relative">
@@ -126,7 +140,6 @@ export default function DynamicGroupDetail() {
 
           <div className="w-full flex border-b border-slate-50 mb-10"><div className="flex-1 text-center pb-4 text-[15px] font-black border-b-2 border-slate-800 text-slate-800">궁합</div></div>
 
-          {/* 궁합 지수 게이지 [#11_01.jpg 반영] */}
           <div className="w-full px-8 flex flex-col items-center mb-12">
             <div className="w-full max-w-[340px]">
               <div className="flex justify-between items-end mb-3">
@@ -139,7 +152,6 @@ export default function DynamicGroupDetail() {
             </div>
           </div>
 
-          {/* 반응형 다각형 네트워크 (SVG 시스템) */}
           <div className="w-full px-4 flex flex-col items-center overflow-visible">
             <div className="relative w-full aspect-square max-w-[380px] overflow-visible">
               <svg viewBox="0 0 400 400" className="w-full h-full overflow-visible pointer-events-none">
@@ -178,7 +190,6 @@ export default function DynamicGroupDetail() {
                 );
               })}
             </div>
-            {/* 범례 표시 [#11_01.jpg 반영] */}
             <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-10 py-6 border-t border-slate-50 w-full">
               {Object.values(relTypes).map((rel, i) => (
                 <div key={i} className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400">
@@ -188,7 +199,6 @@ export default function DynamicGroupDetail() {
             </div>
           </div>
 
-          {/* 멤버별 상세 분석 카드 [#11_01.jpg 반영] */}
           <section className="w-full px-6 mt-10 space-y-6">
             {groupData.members.map((m) => (
               <div key={m.id} className={`bg-[#fcfcfd] rounded-[35px] p-8 border shadow-sm transition-all duration-500 ${selectedMemberId === m.id ? 'border-[#6c5ce7] ring-4 ring-purple-50' : 'border-slate-100'}`}>
@@ -200,14 +210,13 @@ export default function DynamicGroupDetail() {
               </div>
             ))}
 
-            {/* 일주 아코디언 가이드 (내용 완벽 유지) */}
             <div className="pt-20 space-y-6 mb-20">
               <h2 className="text-[18px] font-black text-slate-800 flex items-center gap-2 px-2"><span className="text-[#6c5ce7]">🔮</span> 일주로 보는 궁합이란?</h2>
               {[
                 { q: "일주가 뭐예요?", a: "일주(日柱)는 태어난 '날'의 기운을 나타내는 사주의 핵심 요소예요. 사주명리학에서 일주는 '나 자신'을 가장 잘 표현하는 부분으로, 성격, 기질, 내면의 스타일을 담고 있어요." },
                 { q: "띠랑 뭐가 달라요?", a: "띠는 태어난 해(년)를 기준으로 하지만, 일주는 태어난 날을 기준으로 합니다. 띠가 사회적인 겉모습이라면, 일주는 나 자신의 본질적인 기운과 속마음을 보기에 더 적합합니다." },
-                { q: "왜 일주로 궁합을 봐요?", a: "일주는 개인의 기질과 내면 에너지를 가장 정확하게 담고 있어, 서로 다른 두 사람이 만났을 때 생기는 화학 반응을 깊이 있게 분석할 수 있습니다. [cite: 2026-02-16]" },
-                { q: "우리 사이에서 알 수 있는 것", a: "멤버 간의 1:1 케미 등급과 관계의 특징, 그리고 전체 모임의 조화도를 시각적인 네트워크 그래프로 확인할 수 있습니다. 전통적인 사주를 현대적인 네트워크로 만나보세요! [cite: 2026-02-16]" }
+                { q: "왜 일주로 궁합을 봐요?", a: "일주는 개인의 기질과 내면 에너지를 가장 정확하게 담고 있어, 서로 다른 두 사람이 만났을 때 생기는 화학 반응을 깊이 있게 분석할 수 있습니다." },
+                { q: "우리 사이에서 알 수 있는 것", a: "멤버 간의 1:1 케미 등급과 관계의 특징, 그리고 전체 모임의 조화도를 시각적인 네트워크 그래프로 확인할 수 있습니다. 전통적인 사주를 현대적인 네트워크로 만나보세요!" }
               ].map((item, idx) => (
                 <div key={idx} className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
                   <button onClick={() => setOpenAccordion(openAccordion === idx ? null : idx)} className="w-full p-6 flex justify-between items-center text-left font-bold text-slate-700 text-[14px]">
@@ -222,7 +231,6 @@ export default function DynamicGroupDetail() {
           </section>
         </main>
 
-        {/* 하단 표준 푸터 (5종 링크 완벽 구현) */}
         <footer className="px-8 py-20 bg-white text-center border-t border-slate-50 mt-10">
           <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold mb-4">
             <a href="/intro" className="hover:text-purple-400">서비스 소개</a>
