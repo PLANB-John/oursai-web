@@ -11,7 +11,7 @@ export default function GroupDetail() {
   const [members, setMembers] = useState([]);
   const [groupName, setGroupName] = useState('');
 
-  // 1. 궁합 등급별 점수 및 디자인 정의
+  // 1. 관계 데이터 및 점수 정의
   const relTypes = {
     soulmate: { label: '천생연분', color: '#3b82f6', score: 98 },
     good: { label: '척척학력', color: '#22c55e', score: 82 },
@@ -20,41 +20,19 @@ export default function GroupDetail() {
     worst: { label: '최악조합', color: '#ef4444', score: 24 }
   };
 
-  // 2. 관계 및 점수 산출 로직 [cite: 2026-02-17]
-  const getRelation = (idx1, idx2) => {
-    const diff = Math.abs(idx1 - idx2);
-    const types = Object.values(relTypes);
-    return types[diff % types.length];
-  };
-
-  // 전체 멤버의 평균 궁합 지수 계산 [cite: 2026-02-17]
-  const calculateTotalScore = () => {
-    if (members.length < 2) return 100;
-    let total = 0;
-    let count = 0;
-    for (let i = 0; i < members.length; i++) {
-      for (let j = i + 1; j < members.length; j++) {
-        total += getRelation(i, j).score;
-        count++;
-      }
-    }
-    return Math.floor(total / count);
-  };
-
-  const dynamicScore = calculateTotalScore();
+  // 2. 동적 일주 분석 풀 (참여자 데이터에 맞게 자동 할당)
+  const analysisPool = [
+    { ilju: '경신', element: '금(金)', desc: '날카로운 지혜가 돋보이며 상황 판단이 빠르고 결단력이 뛰어납니다. 새로운 아이디어로 주변을 놀라게 하는 창의적인 면모를 갖춘 매력적인 타입이에요.' },
+    { ilju: '병인', element: '화(火)', desc: '열정적이고 에너지가 넘치며 추진력이 강합니다. 주변 사람들에게 밝은 기운을 전달하며 리더십을 발휘하여 모임의 분위기를 주도하는 스타일입니다.' },
+    { ilju: '갑자', element: '수(水)', desc: '지혜롭고 유연하며 새로운 환경에 적응하는 능력이 탁월합니다. 본질을 꿰뚫어 보는 통찰력이 있어 전략적인 판단과 문제 해결에 능숙합니다.' },
+    { ilju: '무진', element: '토(土)', desc: '듬직하고 신뢰감을 주는 타입으로, 주변을 포용하는 능력이 뛰어납니다. 꾸준함과 성실함으로 목표를 달성하는 끈기가 돋보이는 든든한 존재입니다.' },
+    { ilju: '을해', element: '목(木)', desc: '부드러우면서도 외유내강의 기질이 있습니다. 타인과의 조화로운 관계를 중시하며 예술적인 감각이나 섬세한 표현력이 뛰어난 매력적인 타입입니다.' }
+  ];
 
   useEffect(() => {
     if (!router.isReady) return;
     const savedName = localStorage.getItem('currentGroupName') || '우리 모임';
     setGroupName(savedName);
-
-    const analysisPool = [
-      { ilju: '경신', element: '금(金)', desc: '날카로운 지혜가 돋보이며 상황 판단이 빠르고 결단력이 뛰어납니다. 새로운 아이디어로 주변을 놀라게 하는 창의적인 면모를 갖춘 매력적인 타입이에요.' },
-      { ilju: '병인', element: '화(火)', desc: '열정적이고 에너지가 넘치며 추진력이 강합니다. 주변 사람들에게 밝은 기운을 전달하며 리더십을 발휘하여 모임의 분위기를 주도하는 스타일입니다.' },
-      { ilju: '갑자', element: '수(水)', desc: '지혜롭고 유연하며 새로운 환경에 적응하는 능력이 탁월합니다. 본질을 꿰뚫어 보는 통찰력이 있어 전략적인 판단과 문제 해결에 능숙합니다.' },
-      { ilju: '무진', element: '토(土)', desc: '듬직하고 신뢰감을 주는 타입으로, 주변을 포용하는 능력이 뛰어납니다. 꾸준함과 성실함으로 목표를 달성하는 끈기가 돋보이는 든든한 존재입니다.' },
-      { ilju: '을해', element: '목(木)', desc: '부드러우면서도 외유내강의 기질이 있습니다. 타인과의 조화로운 관계를 중시하며 예술적인 감각이나 섬세한 표현력이 뛰어난 매력적인 타입입니다.' }
-    ];
 
     const savedMembers = JSON.parse(localStorage.getItem('groupMembers') || '[]');
     const enhanced = savedMembers.map((m, idx) => ({
@@ -72,6 +50,27 @@ export default function GroupDetail() {
     }
   }, [router.isReady]);
 
+  // 관계 및 점수 산출 로직 [cite: 2026-02-17]
+  const getRelation = (idx1, idx2) => {
+    const diff = Math.abs(idx1 - idx2);
+    const types = Object.values(relTypes);
+    return types[diff % types.length];
+  };
+
+  const calculateTotalScore = () => {
+    if (members.length < 2) return 100;
+    let total = 0, count = 0;
+    for (let i = 0; i < members.length; i++) {
+      for (let j = i + 1; j < members.length; j++) {
+        total += getRelation(i, j).score;
+        count++;
+      }
+    }
+    return Math.floor(total / count);
+  };
+
+  const dynamicScore = calculateTotalScore();
+
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
     alert("링크가 복사되었습니다!");
@@ -87,10 +86,11 @@ export default function GroupDetail() {
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] flex justify-center items-start sm:py-10 font-sans text-slate-800">
-      <Head><title>{groupName} | 우리 사이 (oursai.kr)</title></Head>
+      <Head><title>{groupName} | 우리 사이</title></Head>
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-40">
         
+        {/* 상단 네비게이션 */}
         <div className="px-6 py-6 flex items-center justify-between border-b border-slate-50">
           <button onClick={() => router.push('/')} className="text-[14px] text-slate-400 font-bold flex items-center gap-1">
             <span className="text-lg">‹</span> 우리 사이
@@ -106,27 +106,38 @@ export default function GroupDetail() {
             <p className="text-[14px] text-slate-400 font-bold mt-1">{members.length}명 참여 중</p>
           </div>
 
-          <div className="flex gap-2 mb-10 px-6 relative">
-            <div className="relative">
-              <button onClick={() => setIsShareOpen(!isShareOpen)} className="px-5 py-2.5 bg-[#6c5ce7] text-white rounded-xl text-[13px] font-black shadow-lg flex items-center gap-1.5 active:scale-95 transition-all">
-                <span>🔗</span> 공유하기
+          {/* --- 1. 수정사항: 모바일 버튼 레이아웃 최적화 --- */}
+          <div className="w-full px-6 mb-10">
+            <div className="grid grid-cols-2 gap-2">
+              <div className="relative">
+                <button 
+                  onClick={() => setIsShareOpen(!isShareOpen)}
+                  className="w-full h-full py-3.5 bg-[#6c5ce7] text-white rounded-xl text-[13px] font-black shadow-lg flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+                >
+                  <span>🔗</span> 공유하기
+                </button>
+                <AnimatePresence>
+                  {isShareOpen && (
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute top-14 left-0 w-[180px] bg-white rounded-2xl shadow-2xl border border-slate-50 z-[60] p-2">
+                      <button onClick={handleCopyLink} className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors text-left font-bold text-slate-600 text-[13px]">📋 링크 복사</button>
+                      <button className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors text-left font-bold text-slate-600 text-[13px]">🔗 링크 공유</button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+              <button onClick={() => router.push('/join')} className="w-full py-3.5 bg-white text-slate-500 border border-slate-100 rounded-xl text-[13px] font-black hover:bg-slate-50 transition-all flex items-center justify-center gap-1">
+                <span>👤+</span> 나도 참여
               </button>
-              <AnimatePresence>
-                {isShareOpen && (
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute top-12 left-0 w-[180px] bg-white rounded-2xl shadow-2xl border border-slate-50 z-[60] p-2">
-                    <button onClick={handleCopyLink} className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors text-left font-bold text-slate-600 text-[13px]">📋 링크 복사</button>
-                    <button className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors text-left font-bold text-slate-600 text-[13px]">🔗 링크 공유</button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {/* 가로 전체를 차지하도록 col-span-2 적용 */}
+              <button onClick={() => { localStorage.clear(); router.push('/create-group'); }} className="col-span-2 py-3.5 bg-[#f3f0ff] text-[#6c5ce7] rounded-xl text-[13px] font-black hover:bg-[#ebe5ff] transition-all flex items-center justify-center gap-1">
+                + 새 모임 만들기
+              </button>
             </div>
-            <button onClick={() => router.push('/join')} className="px-5 py-2.5 bg-white text-slate-500 border border-slate-100 rounded-xl text-[13px] font-black">👤+ 나도 참여</button>
-            <button onClick={() => { localStorage.clear(); router.push('/create-group'); }} className="px-5 py-2.5 bg-[#f3f0ff] text-[#6c5ce7] rounded-xl text-[13px] font-black">+ 새 모임 만들기</button>
           </div>
 
           <div className="w-full flex border-b border-slate-50 mb-10"><div className="flex-1 text-center pb-4 text-[15px] font-black border-b-2 border-slate-800 text-slate-800">궁합</div></div>
 
-          {/* --- 수정사항 1: 동적 궁합 지수 및 게이지 [#11_01.jpg 반영] --- */}
+          {/* 궁합 지수 게이지 */}
           <div className="w-full px-8 flex flex-col items-center mb-12">
             <div className="w-full max-w-[340px]">
               <div className="flex justify-between items-end mb-3">
@@ -139,7 +150,7 @@ export default function GroupDetail() {
             </div>
           </div>
 
-          {/* 네트워크 맵 [#11_01.jpg 반영] */}
+          {/* 다각형 네트워크 맵 */}
           <div className="w-full px-8 flex flex-col items-center">
             <div className="relative w-full aspect-square max-w-[320px] flex justify-center items-center">
               <svg className="absolute inset-0 w-full h-full overflow-visible pointer-events-none">
@@ -173,15 +184,9 @@ export default function GroupDetail() {
                 );
               })}
             </div>
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-12 py-6 border-t border-slate-50 w-full">
-              {Object.values(relTypes).map((rel, i) => (
-                <div key={i} className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400">
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: rel.color }} />{rel.label}
-                </div>
-              ))}
-            </div>
           </div>
 
+          {/* 상세 분석 리포트 카드 */}
           <section className="w-full px-6 mt-16 space-y-6">
             {members.map((m) => (
               <div key={m.id} className={`bg-[#fcfcfd] rounded-[35px] p-8 border shadow-sm transition-all duration-500 ${selectedMemberId === m.id ? 'border-[#6c5ce7] ring-4 ring-purple-50' : 'border-slate-100'}`}>
