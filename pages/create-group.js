@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { supabase } from '../lib/supabaseClient'; // [1] 서버 연결 열쇠 활성화 [cite: 2026-02-17]
+import { supabase } from '../lib/supabaseClient'; // 서버 연결 열쇠 [cite: 2026-02-17]
+import AdUnit from '../components/AdUnit'; // [1] 광고 컴포넌트 불러오기 [cite: 2026-02-18]
 
 export default function CreateGroup() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function CreateGroup() {
                       formData.gender !== '' && 
                       formData.birthDate.length === 8;
 
-  // --- 1. 고유 ID 생성 함수 (8자리 랜덤 문자열) [cite: 2026-02-17] ---
+  // 고유 ID 생성 함수 (8자리 랜덤 문자열) [cite: 2026-02-17]
   const generateRoomId = () => {
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
@@ -33,20 +34,19 @@ export default function CreateGroup() {
     return result;
   };
 
-  // --- 2. 서버 저장 및 페이지 이동 로직 [cite: 2026-02-17] ---
+  // 서버 저장 및 페이지 이동 로직 [cite: 2026-02-17]
   const handleCreate = async () => {
     if (isIljuValid) {
       setIsLoading(true);
       const roomId = generateRoomId();
 
       try {
-        // [3] Supabase 'rooms' 테이블에 데이터 저장
         const { error } = await supabase
           .from('rooms')
           .insert([{
-            id: roomId, // 고유 ID 저장
-            group_name: formData.groupName || '우리 모임', // 모임 이름
-            members: [{ // 멤버 리스트를 JSON 형태로 저장
+            id: roomId,
+            group_name: formData.groupName || '우리 모임',
+            members: [{
               id: Date.now(),
               name: formData.userName,
               emoji: formData.gender === '남' ? '👦' : '👧',
@@ -55,9 +55,8 @@ export default function CreateGroup() {
             }]
           }]);
 
-        if (error) throw error; // 에러 발생 시 catch 블록으로 이동 [cite: 2026-02-17]
+        if (error) throw error;
 
-        // [4] 저장이 완료되면 결과 경로로 이동 [cite: 2026-02-17]
         setTimeout(() => {
           router.push(`/g/${roomId}`);
         }, 1500);
@@ -75,7 +74,7 @@ export default function CreateGroup() {
       
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-20">
         
-        {/* 인연을 불러오는 중... 로딩 연출 [cite: 2026-02-17] */}
+        {/* 인연 등록 로딩 연출 [cite: 2026-02-17] */}
         <AnimatePresence>
           {isLoading && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-[100] bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center space-y-6">
@@ -94,6 +93,13 @@ export default function CreateGroup() {
             <h1 className="text-[28px] font-black text-slate-800 tracking-tight">모임 궁합 생성</h1>
             <p className="text-[14px] text-slate-400 font-medium">모임을 만들고, 멤버들의 궁합을 확인해보세요</p>
           </div>
+
+          {/* [2] 상단 광고 영역 (모임 이름 입력창 바로 위) [cite: 2026-02-18] */}
+          <section className="px-2 py-1">
+            <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[60px]">
+              <AdUnit />
+            </div>
+          </section>
 
           <section className="space-y-8 px-2">
             <div className="space-y-2">
@@ -125,7 +131,7 @@ export default function CreateGroup() {
 
             <div className="space-y-2">
               <label className="text-[14px] font-black text-slate-700">태어난 시간 (선택)</label>
-              <input type="text" placeholder="1430" maxLength={4} className="w-full p-4 bg-slate-50 rounded-2xl text-[14px] focus:outline-none" />
+              <input type="text" placeholder="1430" maxLength={4} className="w-full p-4 bg-slate-50 rounded-2xl text-[14px] focus:outline-none" onChange={(e) => setFormData({...formData, birthTime: e.target.value})} />
             </div>
 
             <button onClick={handleCreate} disabled={!isIljuValid || isLoading} className={`w-full py-6 rounded-[24px] font-black text-[18px] transition-all shadow-xl ${isIljuValid && !isLoading ? 'bg-[#D980FA] text-white active:scale-95' : 'bg-slate-100 text-slate-300 cursor-not-allowed'}`}>
@@ -147,14 +153,23 @@ export default function CreateGroup() {
                   <button onClick={() => setOpenAccordion(openAccordion === idx ? null : idx)} className="w-full p-6 flex justify-between items-center text-left font-bold text-slate-700 text-[14px]">
                     {item.q} <span className={`text-slate-300 transition-transform ${openAccordion === idx ? 'rotate-180' : ''}`}>▼</span>
                   </button>
-                  {openAccordion === idx && <div className="px-6 pb-6 text-[13px] text-slate-500 leading-7 border-t border-slate-50 pt-4">{item.a}</div>}
+                  {openAccordion === idx && (
+                    <div className="px-6 pb-6 text-[13px] text-slate-500 leading-7 border-t border-slate-50 pt-4">
+                      {item.a}
+                      {/* [3] 하단 광고 영역 (아코디언 마지막 항목 '우리 사이에서 알 수 있는 것' 바로 밑) [cite: 2026-02-18] */}
+                      {idx === 3 && (
+                        <div className="mt-6 pt-6 border-t border-slate-50">
+                          <AdUnit />
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </section>
         </main>
 
-        {/* 표준 푸터 (5종 링크 포함) [cite: 2026-02-17] */}
         <footer className="px-8 py-20 bg-white text-center border-t border-slate-50 mt-10">
           <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold mb-4">
             <a href="/intro">서비스 소개</a><span>|</span><a href="/faq">자주 묻는 질문</a><span>|</span><a href="/feedback">의견 보내기</a>
