@@ -118,7 +118,7 @@ export default function Intro() {
           <section className="space-y-4 pt-10 border-t border-slate-50">
             <div className="space-y-1">
               <h2 className="text-[14px] font-bold text-slate-800">연락처</h2>
-              <p className="text-[12px] text-purple-400 font-medium cursor-pointer">hello@oursai.kr</p>
+              <p className="text-[12px] text-purple-400 font-medium cursor-pointer">contact@oursai.kr</p>
             </div>
             <p className="text-[11px] text-slate-300">서비스 출시: 2026년 2월</p>
           </section>
