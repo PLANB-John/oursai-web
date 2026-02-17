@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../lib/supabaseClient'; // [1] 서버 연결 열쇠 활성화 [cite: 2026-02-17]
 
 export default function CreateGroup() {
   const router = useRouter();
@@ -33,32 +33,39 @@ export default function CreateGroup() {
     return result;
   };
 
-  const handleCreate = () => {
+  // --- 2. 서버 저장 및 페이지 이동 로직 [cite: 2026-02-17] ---
+  const handleCreate = async () => {
     if (isIljuValid) {
       setIsLoading(true);
-      
-      // 2. 새로운 고유 방 ID 생성 [cite: 2026-02-17]
       const roomId = generateRoomId();
 
-      // 3. 해당 ID를 키값으로 하여 방 정보와 방장(본인) 데이터 저장 [cite: 2026-02-17]
-      const roomData = {
-        groupName: formData.groupName || '우리 모임',
-        members: [{
-          id: Date.now(),
-          name: formData.userName,
-          emoji: formData.gender === '남' ? '👦' : '👧',
-          birthDate: formData.birthDate,
-          isLeader: true // 방장 표시
-        }]
-      };
+      try {
+        // [3] Supabase 'rooms' 테이블에 데이터 저장
+        const { error } = await supabase
+          .from('rooms')
+          .insert([{
+            id: roomId, // 고유 ID 저장
+            group_name: formData.groupName || '우리 모임', // 모임 이름
+            members: [{ // 멤버 리스트를 JSON 형태로 저장
+              id: Date.now(),
+              name: formData.userName,
+              emoji: formData.gender === '남' ? '👦' : '👧',
+              birthDate: formData.birthDate,
+              isLeader: true
+            }]
+          }]);
 
-      // localStorage에 room_ID 형식으로 저장 [cite: 2026-02-17]
-      localStorage.setItem(`room_${roomId}`, JSON.stringify(roomData));
+        if (error) throw error; // 에러 발생 시 catch 블록으로 이동 [cite: 2026-02-17]
 
-      // 4. 생성된 고유 경로로 이동 (예: /g/lxddOVWl)
-      setTimeout(() => {
-        router.push(`/g/${roomId}`);
-      }, 2000);
+        // [4] 저장이 완료되면 결과 경로로 이동 [cite: 2026-02-17]
+        setTimeout(() => {
+          router.push(`/g/${roomId}`);
+        }, 1500);
+
+      } catch (error) {
+        alert("모임 생성 중 오류가 발생했습니다: " + error.message);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -68,12 +75,12 @@ export default function CreateGroup() {
       
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-20">
         
-        {/* 인연을 불러오는 중... 로딩 연출 */}
+        {/* 인연을 불러오는 중... 로딩 연출 [cite: 2026-02-17] */}
         <AnimatePresence>
           {isLoading && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-[100] bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center space-y-6">
               <div className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
-              <p className="text-[18px] font-black text-slate-700">인연을 불러오는 중...</p>
+              <p className="text-[18px] font-black text-slate-700">인연을 등록하는 중...</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -126,7 +133,7 @@ export default function CreateGroup() {
             </button>
           </section>
 
-          {/* 일주 아코디언 가이드 */}
+          {/* 일주 아코디언 가이드 [cite: 2026-02-17] */}
           <section className="pt-10 space-y-6">
             <h2 className="text-[18px] font-black text-slate-800 flex items-center gap-2 px-2"><span className="text-[#D980FA]">✨</span> 일주로 보는 궁합이란?</h2>
             <div className="space-y-3">
@@ -147,6 +154,7 @@ export default function CreateGroup() {
           </section>
         </main>
 
+        {/* 표준 푸터 (5종 링크 포함) [cite: 2026-02-17] */}
         <footer className="px-8 py-20 bg-white text-center border-t border-slate-50 mt-10">
           <div className="flex justify-center gap-6 text-[12px] text-slate-300 font-bold mb-4">
             <a href="/intro">서비스 소개</a><span>|</span><a href="/faq">자주 묻는 질문</a><span>|</span><a href="/feedback">의견 보내기</a>
