@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabaseClient'; // 서버 연결 열쇠 [cite: 2026-02-17]
-import AdUnit from '../../components/AdUnit'; // [1] 광고 컴포넌트 불러오기 (경로 주의) [cite: 2026-02-18]
+import AdUnit from '../../components/AdUnit'; // 광고 컴포넌트 불러오기 [cite: 2026-02-18]
 
 export default function DynamicGroupDetail() {
   const router = useRouter();
@@ -14,7 +14,7 @@ export default function DynamicGroupDetail() {
   const [selectedMemberId, setSelectedMemberId] = useState(null);
   const [groupData, setGroupData] = useState(null);
 
-  // 1. 일주 및 분석 데이터 풀 (레퍼런스 #11_01 반영)
+  // 1. 일주 및 분석 데이터 풀
   const analysisPool = [
     { ilju: '경신', element: '금(金)', desc: '날카로운 지혜가 돋보이며 상황 판단이 빠르고 결단력이 뛰어납니다. 새로운 아이디어로 주변을 놀라게 하는 창의적인 면모를 갖춘 매력적인 타입이에요.' },
     { ilju: '병인', element: '화(火)', desc: '열정적이고 에너지가 넘치며 추진력이 강합니다. 주변 사람들에게 밝은 기운을 전달하며 리더십을 발휘하여 모임의 분위기를 주도하는 스타일입니다.' },
@@ -31,7 +31,7 @@ export default function DynamicGroupDetail() {
     worst: { label: '최악조합', color: '#ef4444', score: 24 }
   };
 
-  // 2. 서버 연동 데이터 로드 로직 [cite: 2026-02-17]
+  // 2. 서버 연동 데이터 로드 로직
   useEffect(() => {
     if (!router.isReady || !id) return;
 
@@ -88,10 +88,29 @@ export default function DynamicGroupDetail() {
     return { x: centerX + radius * Math.cos(angle), y: centerY + radius * Math.sin(angle) };
   };
 
+  // --- 공유 기능 1: 링크 복사 ---
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
     alert("링크가 복사되었습니다!");
     setIsShareOpen(false);
+  };
+
+  // --- 공유 기능 2: 모바일 공유 창 호출 [cite: 2026-02-18] ---
+  const handleShareLink = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `우리 사이 - ${groupData.groupName}`,
+          text: '우리 사이의 일주 궁합을 확인해보세요! 🔮',
+          url: window.location.href,
+        });
+        setIsShareOpen(false);
+      } catch (err) {
+        console.log('공유 취소 또는 에러:', err);
+      }
+    } else {
+      handleCopyLink(); // 공유 기능 미지원 환경에서는 복사로 대체 [cite: 2026-02-18]
+    }
   };
 
   if (!groupData) return <div className="min-h-screen bg-white flex items-center justify-center font-black">데이터를 서버에서 불러오는 중...</div>;
@@ -125,7 +144,7 @@ export default function DynamicGroupDetail() {
                   {isShareOpen && (
                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute top-14 left-0 w-[180px] bg-white rounded-2xl shadow-2xl border border-slate-50 z-[60] p-2">
                       <button onClick={handleCopyLink} className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors text-left font-bold text-slate-600 text-[13px]">📋 링크 복사</button>
-                      <button className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors text-left font-bold text-slate-600 text-[13px]">🔗 링크 공유</button>
+                      <button onClick={handleShareLink} className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors text-left font-bold text-slate-600 text-[13px]">🔗 링크 공유</button>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -188,7 +207,6 @@ export default function DynamicGroupDetail() {
               })}
             </div>
 
-            {/* 범례 표시 영역 */}
             <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-10 py-6 border-t border-slate-50 w-full">
               {Object.values(relTypes).map((rel, i) => (
                 <div key={i} className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400">
@@ -197,7 +215,7 @@ export default function DynamicGroupDetail() {
               ))}
             </div>
 
-            {/* [신규 광고 1] 5가지 조합(범례) 바로 밑 [cite: 2026-02-18] */}
+            {/* [1] 신규 광고 영역 (범례 표시 바로 밑) [cite: 2026-02-18] */}
             <section className="w-full px-2 py-4">
               <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[60px]">
                 <AdUnit />
@@ -216,14 +234,14 @@ export default function DynamicGroupDetail() {
               </div>
             ))}
 
-            {/* [신규 광고 2] 아코디언 가이드 바로 위 [cite: 2026-02-18] */}
+            {/* [2] 신규 광고 영역 (아코디언 가이드 바로 위) [cite: 2026-02-18] */}
             <section className="w-full py-6">
               <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[60px]">
                 <AdUnit />
               </div>
             </section>
 
-            <div className="pt-20 space-y-6 mb-20">
+            <div className="pt-10 space-y-6 mb-20">
               <h2 className="text-[18px] font-black text-slate-800 flex items-center gap-2 px-2"><span className="text-[#6c5ce7]">🔮</span> 일주로 보는 궁합이란?</h2>
               {[
                 { q: "일주가 뭐예요?", a: "일주(日柱)는 태어난 '날'의 기운을 나타내는 사주의 핵심 요소예요. 사주명리학에서 일주는 '나 자신'을 가장 잘 표현하는 부분으로, 성격, 기질, 내면의 스타일을 담고 있어요." },
