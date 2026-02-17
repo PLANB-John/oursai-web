@@ -99,7 +99,9 @@ export default function DynamicGroupDetail() {
     if (navigator.share) {
       try {
         await navigator.share({
+          // 공유 창 제목
           title: `${groupData.groupName} ㅣ 우리 사이`,
+          // 전송되는 메시지 (이모지 제거됨) [cite: 2026-02-18]
           text: '우리 사이의 사주 궁합을 확인해보세요!', 
           url: window.location.href,
         });
@@ -120,10 +122,15 @@ export default function DynamicGroupDetail() {
     <div className="min-h-screen bg-[#f8f9fa] flex justify-center items-start sm:py-10 font-sans text-slate-800">
       {/* --- [수정] 카톡 공유용 미리보기(Open Graph) 설정 완벽 구현 [cite: 2026-02-18] --- */}
       <Head>
+        {/* 브라우저 탭 제목 */}
         <title>{groupData.groupName} ㅣ 우리 사이</title>
+        {/* SNS 미리보기 제목: '모임 이름 ㅣ 우리 사이' [cite: 2026-02-18] */}
         <meta property="og:title" content={`${groupData.groupName} ㅣ 우리 사이`} />
+        {/* 미리보기 설명 문구 [cite: 2026-02-18] */}
         <meta property="og:description" content="친구, 동료, 가족과 함께 사주 궁합을 확인해보세요!" />
+        {/* 이미지 주소 (절대 경로) [cite: 2026-02-18] */}
         <meta property="og:image" content="https://oursai.kr/og-image.png" />
+        {/* 현재 페이지 주소 (각 모임 고유 주소) [cite: 2026-02-18] */}
         <meta property="og:url" content={`https://oursai.kr/g/${id}`} />
         <meta property="og:type" content="website" />
       </Head>
@@ -223,7 +230,7 @@ export default function DynamicGroupDetail() {
             </div>
 
             <section className="w-full px-2 py-4">
-              <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[60px]">
+              <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[100px]">
                 <AdUnit />
               </div>
             </section>
@@ -241,7 +248,7 @@ export default function DynamicGroupDetail() {
             ))}
 
             <section className="w-full py-6">
-              <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[60px]">
+              <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[100px]">
                 <AdUnit />
               </div>
             </section>
