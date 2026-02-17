@@ -129,9 +129,9 @@ export default function DynamicGroupDetail() {
         {/* 미리보기 설명 문구 [cite: 2026-02-18] */}
         <meta property="og:description" content="친구, 동료, 가족과 함께 사주 궁합을 확인해보세요!" />
         {/* 이미지 주소 (절대 경로) [cite: 2026-02-18] */}
-        <meta property="og:image" content="https://oursai.kr/og-image.png" />
+        <meta property="og:image" content="https://www.oursai.kr/og-image.png" />
         {/* 현재 페이지 주소 (각 모임 고유 주소) [cite: 2026-02-18] */}
-        <meta property="og:url" content={`https://oursai.kr/g/${id}`} />
+        <meta property="og:url" content={`https://www.oursai.kr/g/${id}`} />
         <meta property="og:type" content="website" />
       </Head>
 
