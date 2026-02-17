@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { supabase } from '../../lib/supabaseClient'; // 서버 연결 열쇠 [cite: 2026-02-17]
-import AdUnit from '../../components/AdUnit'; // 광고 컴포넌트 [cite: 2026-02-18]
+import { supabase } from '../../lib/supabaseClient'; // 서버 연결
+import AdUnit from '../../components/AdUnit'; // 광고 컴포넌트
 
 export default function DynamicGroupDetail() {
   const router = useRouter();
@@ -14,7 +14,7 @@ export default function DynamicGroupDetail() {
   const [selectedMemberId, setSelectedMemberId] = useState(null);
   const [groupData, setGroupData] = useState(null);
 
-  // 1. 일주 및 분석 데이터 풀 (레퍼런스 #11_01 반영)
+  // 1. 일주 및 분석 데이터 풀
   const analysisPool = [
     { ilju: '경신', element: '금(金)', desc: '날카로운 지혜가 돋보이며 상황 판단이 빠르고 결단력이 뛰어납니다. 새로운 아이디어로 주변을 놀라게 하는 창의적인 면모를 갖춘 매력적인 타입이에요.' },
     { ilju: '병인', element: '화(火)', desc: '열정적이고 에너지가 넘치며 추진력이 강합니다. 주변 사람들에게 밝은 기운을 전달하며 리더십을 발휘하여 모임의 분위기를 주도하는 스타일입니다.' },
@@ -31,7 +31,7 @@ export default function DynamicGroupDetail() {
     worst: { label: '최악조합', color: '#ef4444', score: 24 }
   };
 
-  // 2. 서버 연동 데이터 로드 로직 [cite: 2026-02-17]
+  // 2. 서버 데이터 로드
   useEffect(() => {
     if (!router.isReady || !id) return;
 
@@ -94,7 +94,7 @@ export default function DynamicGroupDetail() {
     setIsShareOpen(false);
   };
 
-  // --- [수정] 공유 기능: 요청하신 문구로 변경 (이모지 제거) [cite: 2026-02-18] ---
+  // --- [수정] 공유 메시지 내용 변경 (이모지 제거) [cite: 2026-02-18] ---
   const handleShareLink = async () => {
     if (navigator.share) {
       try {
@@ -118,12 +118,12 @@ export default function DynamicGroupDetail() {
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] flex justify-center items-start sm:py-10 font-sans text-slate-800">
-      {/* --- [신규] 카톡 공유용 미리보기(Open Graph) 설정 완벽 구현 [cite: 2026-02-18] --- */}
+      {/* --- [신규] 카톡 공유용 미리보기(Open Graph) 설정 [cite: 2026-02-18] --- */}
       <Head>
         <title>{groupData.groupName} | 우리 사이 (oursai.kr)</title>
         <meta property="og:title" content={`${groupData.groupName} | 우리사이`} />
         <meta property="og:description" content="친구, 동료, 가족과 함께 사주 궁합을 확인해보세요!" />
-        <meta property="og:image" content="https://oursai.kr/og-image.png" />
+        <meta property="og:image" content="https://oursai.kr/og-image.png" /> {/* [!] /public 폴더에 이미지를 꼭 업로드하세요 */}
         <meta property="og:url" content={`https://oursai.kr/g/${id}`} />
         <meta property="og:type" content="website" />
       </Head>
@@ -222,7 +222,6 @@ export default function DynamicGroupDetail() {
               ))}
             </div>
 
-            {/* [1] 광고 영역 (범례 표시 바로 밑) [cite: 2026-02-18] */}
             <section className="w-full px-2 py-4">
               <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[100px]">
                 <AdUnit />
@@ -241,7 +240,6 @@ export default function DynamicGroupDetail() {
               </div>
             ))}
 
-            {/* [2] 광고 영역 (아코디언 가이드 바로 위) [cite: 2026-02-18] */}
             <section className="w-full py-6">
               <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[100px]">
                 <AdUnit />
