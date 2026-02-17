@@ -99,8 +99,12 @@ export default function DynamicGroupDetail() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${groupData.groupName} | 우리사이`,
+          // 공유 창에 뜨는 제목 [cite: 2026-02-18]
+          title: `${groupData.groupName} ㅣ 우리 사이`,
+        
+          // 전송되는 메시지 내용 (이모지 제거) [cite: 2026-02-18]
           text: '우리 사이의 사주 궁합을 확인해보세요!', 
+        
           url: window.location.href,
         });
         setIsShareOpen(false);
@@ -108,6 +112,7 @@ export default function DynamicGroupDetail() {
         console.log('공유 취소 또는 에러:', err);
       }
     } else {
+      // 지원하지 않는 환경일 때 복사 기능 실행
       handleCopyLink();
     }
   };
@@ -120,12 +125,22 @@ export default function DynamicGroupDetail() {
     <div className="min-h-screen bg-[#f8f9fa] flex justify-center items-start sm:py-10 font-sans text-slate-800">
       {/* --- [신규] 카톡 공유용 미리보기(Open Graph) 설정 [cite: 2026-02-18] --- */}
       <Head>
-        <title>우리 사이 | 우리 사이 운명일까?</title>
-        <meta property="og:title" content={`${groupData.groupName} | 우리사이`} />
+        {/* 브라우저 탭 제목 */}
+        <title>{groupData.groupName} ㅣ 우리 사이</title>
+  
+        {/* [핵심] 카톡 미리보기 제목: '모임 이름 ㅣ 우리 사이' [cite: 2026-02-18] */}
+        <meta property="og:title" content={`${groupData.groupName} ㅣ 우리 사이`} />
+  
+        {/* 미리보기 설명 문구 [cite: 2026-02-18] */}
         <meta property="og:description" content="친구, 동료, 가족과 함께 사주 궁합을 확인해보세요!" />
-        <meta property="og:image" content="https://oursai.kr/og-image.png" /> {/* [!] /public 폴더에 이미지를 꼭 업로드하세요 */}
+  
+        {/* 업로드한 이미지 주소 (절대 경로) [cite: 2026-02-18] */}
+        <meta property="og:image" content="https://oursai.kr/og-image.png" />
+  
+        {/* 현재 페이지 주소 [cite: 2026-02-18] */}
         <meta property="og:url" content={`https://oursai.kr/g/${id}`} />
         <meta property="og:type" content="website" />
+        <title>우리 사이 | 우리 사이 운명일까?</title>
       </Head>
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-40">
