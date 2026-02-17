@@ -100,11 +100,11 @@ export default function Privacy() {
             <section className="space-y-3">
               <h2 className="font-bold text-slate-800 text-[16px]">8. 연락처</h2>
               <p className="text-[13px]">개인정보 관련 문의는 아래 이메일로 연락해 주세요.</p>
-              <p className="text-[13px] font-bold text-slate-800">이메일: hello@oursai.kr</p>
+              <p className="text-[13px] font-bold text-slate-800">이메일: contact@oursai.kr</p>
             </section>
 
             <p className="text-[12px] text-slate-400 pt-10 border-t border-slate-50">
-              시행일: 2026년 2월 13일
+              서비스 출시: 2026년 2월
             </p>
           </div>
         </main>
