@@ -149,10 +149,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- [수정된 광고 섹션] 높이를 줄여 통계 섹션과 조화를 이룸 [cite: 2026-02-17] --- */}
+        {/* --- [수정된 슬림 광고 섹션] 레퍼런스 스타일 완벽 반영 --- */}
         <section className="px-8 py-1">
-          <div className="w-full bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden min-h-[80px] py-1 flex items-center justify-center">
-            {/* AdUnit 컴포넌트 호출 (높이 최적화 반영) [cite: 2026-02-17] */}
+          <div className="w-full bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center">
+            {/* AdUnit의 높이는 AdUnit.js 코드에서 제어됩니다 [cite: 2026-02-17] */}
             <AdUnit />
           </div>
         </section>
