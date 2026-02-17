@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
+import AdUnit from '../components/AdUnit'; // [1] 광고 컴포넌트 불러오기 [cite: 2026-02-17]
 
 // 숫자가 올라가는 애니메이션 컴포넌트
 const AnimatedNumber = ({ value }) => {
@@ -148,8 +149,16 @@ export default function Home() {
           </div>
         </section>
 
+        {/* --- [신규 추가] 구글 애드센스 광고 영역 (통계 섹션 바로 아래) [cite: 2026-02-17] --- */}
+        <section className="px-8 py-2">
+          <div className="w-full bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden min-h-[100px] flex items-center justify-center">
+            {/* AdUnit 컴포넌트 호출 [cite: 2026-02-17] */}
+            <AdUnit />
+          </div>
+        </section>
+
         {/* --- 4. 메인 액션 버튼 --- */}
-        <main className="px-8 py-8 space-y-4">
+        <main className="px-8 py-6 space-y-4">
           <button 
             onClick={() => router.push('/create-group')}
             className="w-full py-6 bg-[#9b59b6] text-white rounded-[24px] font-black text-[18px] shadow-lg shadow-purple-100 hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3"
