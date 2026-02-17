@@ -48,7 +48,11 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-100 flex justify-center items-start sm:py-10 font-sans text-slate-800">
       <Head>
-        <title>우리 사이 (oursai.kr) | 우리 사이 운명일까?</title>
+        <title>우리 사이 | 우리 사이 운명일까?</title>
+        <meta property="og:title" content="우리 사이 | 사주로 잇다" />
+        <meta property="og:description" content="친구, 동료, 가족과 함께 사주 궁합을 확인해보세요!" />
+        <meta property="og:image" content="https://oursai.kr/og-image.png" />
+        <meta property="og:url" content="https://oursai.kr" />
       </Head>
 
       <div className="w-full max-w-[480px] min-h-screen bg-white shadow-2xl flex flex-col relative overflow-hidden sm:rounded-[40px] pb-20">
