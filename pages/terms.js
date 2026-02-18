@@ -120,11 +120,11 @@ export default function Terms() {
             <section className="space-y-3">
               <h2 className="font-bold text-slate-800 text-[16px]">11. 연락처</h2>
               <p className="text-[13px]">서비스 이용 관련 문의사항은 아래로 연락해 주세요.</p>
-              <p className="text-[13px] font-bold text-slate-800">이메일: hello@oursai.kr</p>
+              <p className="text-[13px] font-bold text-slate-800">이메일: contact@oursai.kr</p>
             </section>
 
             <p className="text-[12px] text-slate-400 pt-10 border-t border-slate-50">
-              시행일: 2026년 2월 10일
+              시행일: 2026년 2월
             </p>
           </div>
         </main>
