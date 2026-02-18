@@ -96,7 +96,8 @@ export default function DynamicGroupDetail({ serverRoomName, roomId }) {
 
       // [수정 완료] 가짜 analysisPool 대신 진짜 알고리즘을 사용하여 멤버 정보 강화 [cite: 2026-02-18]
       const enhancedMembers = data.members.map((m) => {
-        const saju = getSajuInfo(m.birth_date);
+        const birthday = m.birth_date || m.birthDate || m.birthday;
+        const saju = getSajuInfo(birthday);
         return {
           ...m,
           ilju: saju.ilju,
