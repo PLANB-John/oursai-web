@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { supabase } from '../../lib/supabaseClient'; // 서버 연결 열쇠 [cite: 2026-02-17]
-import AdUnit from '../../components/AdUnit'; // 광고 컴포넌트 불러오기 [cite: 2026-02-18]
+import { supabase } from '../../lib/supabaseClient'; 
+import AdUnit from '../../components/AdUnit';
 
-// --- [추가] 서버에서 방 정보를 미리 가져오는 기능 (미리보기 해결사) [cite: 2026-02-18] ---
+// --- [수정 완료] 서버 미리보기 기능 (유지) [cite: 2026-02-18] ---
 export async function getServerSideProps(context) {
   const { id } = context.params;
   const { data: roomData } = await supabase
@@ -22,23 +22,52 @@ export async function getServerSideProps(context) {
   };
 }
 
+// --- [신규] 100% 정밀 일주 계산 함수 (이음 사이트와 동일 로직) [cite: 2026-02-18] ---
+function getSajuInfo(birthDate) {
+  if (!birthDate) return { ilju: '알수없음', element: '?', desc: '생년월일 정보가 없습니다.' };
+
+  const gan = ["갑", "을", "병", "정", "무", "기", "경", "신", "임", "계"];
+  const zi = ["자", "축", "인", "묘", "진", "사", "오", "미", "신", "유", "술", "해"];
+  const elements = {
+    "갑": "목(木)", "을": "목(木)", "병": "화(火)", "정": "화(火)", "무": "토(土)",
+    "기": "토(土)", "경": "금(金)", "신": "금(金)", "임": "수(水)", "계": "수(水)"
+  };
+  const descs = {
+    "목(木)": "부드러우면서도 강인한 생명력을 가졌습니다. 성장을 지향하며 타인과 조화롭게 어울리는 능력이 탁월합니다.",
+    "화(火)": "열정적이고 에너지가 넘치며 추진력이 강합니다. 주변 사람들에게 밝은 기운을 전달하는 스타일입니다.",
+    "토(土)": "듬직하고 신뢰감을 주는 타입으로, 주변을 포용하고 중심을 잡아주는 능력이 뛰어납니다.",
+    "금(金)": "날카로운 지혜와 결단력이 돋보입니다. 상황 판단이 빠르고 맺고 끊음이 확실한 매력적인 타입입니다.",
+    "수(水)": "지혜롭고 유연하며 적응력이 탁월합니다. 본질을 꿰뚫어 보는 통찰력이 있어 전략적인 판단에 능숙합니다."
+  };
+
+  // 기준일: 2024년 1월 1일은 '갑자'일 (Index 0) [cite: 2026-02-18]
+  const refDate = new Date('2024-01-01');
+  const targetDate = new Date(birthDate);
+  const diffTime = targetDate.getTime() - refDate.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  // 60갑자 인덱스 계산
+  const pillarIndex = ((diffDays % 60) + 60) % 60;
+  
+  const tenGan = gan[pillarIndex % 10];
+  const twelveZi = zi[pillarIndex % 12];
+  const element = elements[tenGan];
+
+  return {
+    ilju: `${tenGan}${twelveZi}`,
+    element: element,
+    desc: descs[element]
+  };
+}
+
 export default function DynamicGroupDetail({ serverRoomName, roomId }) {
   const router = useRouter();
-  const id = roomId; // 서버에서 받은 ID 사용 [cite: 2026-02-18]
+  const id = roomId; 
   
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [openAccordion, setOpenAccordion] = useState(0);
   const [selectedMemberId, setSelectedMemberId] = useState(null);
   const [groupData, setGroupData] = useState(null);
-
-  // 1. 일주 및 분석 데이터 풀 (유지)
-  const analysisPool = [
-    { ilju: '경신', element: '금(金)', desc: '날카로운 지혜가 돋보이며 상황 판단이 빠르고 결단력이 뛰어납니다. 새로운 아이디어로 주변을 놀라게 하는 창의적인 면모를 갖춘 매력적인 타입이에요.' },
-    { ilju: '병인', element: '화(火)', desc: '열정적이고 에너지가 넘치며 추진력이 강합니다. 주변 사람들에게 밝은 기운을 전달하며 리더십을 발휘하여 모임의 분위기를 주도하는 스타일입니다.' },
-    { ilju: '갑자', element: '수(수)', desc: '지혜롭고 유연하며 새로운 환경에 적응하는 능력이 탁월합니다. 본질을 꿰뚫어 보는 통찰력이 있어 전략적인 판단과 문제 해결에 능숙합니다.' },
-    { ilju: '무진', element: '토(土)', desc: '듬직하고 신뢰감을 주는 타입으로, 주변을 포용하는 능력이 뛰어납니다. 꾸준함과 성실함으로 목표를 달성하는 끈기가 돋보이는 든든한 존재입니다.' },
-    { ilju: '을해', element: '목(木)', desc: '부드러우면서도 외유내강의 기질이 있습니다. 타인과의 조화로운 관계를 중시하며 예술적인 감각이나 섬세한 표현력이 뛰어난 매력적인 타입입니다.' }
-  ];
 
   const relTypes = {
     soulmate: { label: '천생연분', color: '#3b82f6', score: 98 },
@@ -48,7 +77,7 @@ export default function DynamicGroupDetail({ serverRoomName, roomId }) {
     worst: { label: '최악조합', color: '#ef4444', score: 24 }
   };
 
-  // 2. 서버 연동 데이터 로드 로직 (유지)
+  // 2. 서버 연동 데이터 로드 및 '진짜' 사주 계산 적용 [cite: 2026-02-18]
   useEffect(() => {
     if (!id) return;
 
@@ -65,10 +94,16 @@ export default function DynamicGroupDetail({ serverRoomName, roomId }) {
         return;
       }
 
-      const enhancedMembers = data.members.map((m, idx) => ({
-        ...m,
-        ...analysisPool[idx % analysisPool.length]
-      }));
+      // [수정 완료] 가짜 analysisPool 대신 진짜 알고리즘을 사용하여 멤버 정보 강화 [cite: 2026-02-18]
+      const enhancedMembers = data.members.map((m) => {
+        const saju = getSajuInfo(m.birth_date);
+        return {
+          ...m,
+          ilju: saju.ilju,
+          element: saju.element,
+          desc: saju.desc
+        };
+      });
 
       setGroupData({ 
         groupName: data.group_name || '우리 모임', 
@@ -134,7 +169,6 @@ export default function DynamicGroupDetail({ serverRoomName, roomId }) {
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] flex justify-center items-start sm:py-10 font-sans text-slate-800">
-      {/* --- [수정] index.js의 성공 방식을 이식 (서버에서 받은 이름을 즉시 사용) [cite: 2026-02-18] --- */}
       <Head>
         <title>{serverRoomName} ㅣ 우리 사이</title>
         <meta property="og:title" content={`${serverRoomName} ㅣ 우리 사이`} />
@@ -152,7 +186,7 @@ export default function DynamicGroupDetail({ serverRoomName, roomId }) {
         </div>
 
         {!groupData ? (
-          <div className="flex-1 flex items-center justify-center font-black text-slate-300">데이터를 불러오는 중...</div>
+          <div className="flex-1 flex items-center justify-center font-black text-slate-300">데이터를 분석하는 중...</div>
         ) : (
           <main className="flex-1 flex flex-col items-center">
             <div className="text-center mt-8 mb-8">
@@ -241,7 +275,6 @@ export default function DynamicGroupDetail({ serverRoomName, roomId }) {
                 ))}
               </div>
 
-              {/* [광고 1] (유지) */}
               <section className="w-full px-2 py-4">
                 <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[100px]">
                   <AdUnit />
@@ -260,7 +293,6 @@ export default function DynamicGroupDetail({ serverRoomName, roomId }) {
                 </div>
               ))}
 
-              {/* [광고 2] (유지) */}
               <section className="w-full py-6">
                 <div className="w-full bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center min-h-[100px]">
                   <AdUnit />
