@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabaseClient'; 
 import AdUnit from '../../components/AdUnit';
 
-// --- [수정 완료] 서버 미리보기 기능 (유지) [cite: 2026-02-18] ---
+// --- [유지] 서버 미리보기 기능 [cite: 2026-02-18] ---
 export async function getServerSideProps(context) {
   const { id } = context.params;
   const { data: roomData } = await supabase
@@ -22,10 +22,14 @@ export async function getServerSideProps(context) {
   };
 }
 
-// --- [신규] 100% 정밀 일주 계산 함수 (이음 사이트와 동일 로직) [cite: 2026-02-18] ---
-function getSajuInfo(birthDate) {
-  if (!birthDate) return { ilju: '알수없음', element: '?', desc: '생년월일 정보가 없습니다.' };
+// --- [신규 추가] 100% 정밀 일주 계산 함수 (YYYYMMDD 대응) [cite: 2026-02-18] ---
+function getSajuInfo(rawDate) {
+  // Supabase의 "19900731" 형식을 처리합니다.
+  if (!rawDate || rawDate.length !== 8) return { ilju: '알수없음', element: '?', desc: '생년월일 정보가 없습니다.' };
 
+  // Date 객체가 인식할 수 있게 "1990-07-31" 형태로 변환 [cite: 2026-02-18]
+  const formattedDate = `${rawDate.substring(0, 4)}-${rawDate.substring(4, 6)}-${rawDate.substring(6, 8)}`;
+  
   const gan = ["갑", "을", "병", "정", "무", "기", "경", "신", "임", "계"];
   const zi = ["자", "축", "인", "묘", "진", "사", "오", "미", "신", "유", "술", "해"];
   const elements = {
@@ -42,7 +46,7 @@ function getSajuInfo(birthDate) {
 
   // 기준일: 2024년 1월 1일은 '갑자'일 (Index 0) [cite: 2026-02-18]
   const refDate = new Date('2024-01-01');
-  const targetDate = new Date(birthDate);
+  const targetDate = new Date(formattedDate);
   const diffTime = targetDate.getTime() - refDate.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
@@ -77,7 +81,7 @@ export default function DynamicGroupDetail({ serverRoomName, roomId }) {
     worst: { label: '최악조합', color: '#ef4444', score: 24 }
   };
 
-  // 2. 서버 연동 데이터 로드 및 '진짜' 사주 계산 적용 [cite: 2026-02-18]
+  // 2. 서버 연동 및 진짜 사주 계산 로직 [cite: 2026-02-18]
   useEffect(() => {
     if (!id) return;
 
@@ -94,10 +98,9 @@ export default function DynamicGroupDetail({ serverRoomName, roomId }) {
         return;
       }
 
-      // [수정 완료] 가짜 analysisPool 대신 진짜 알고리즘을 사용하여 멤버 정보 강화 [cite: 2026-02-18]
+      // [수정 완료] DB 필드명 birthDate 매칭 및 알고리즘 적용
       const enhancedMembers = data.members.map((m) => {
-        const birthday = m.birth_date || m.birthDate || m.birthday;
-        const saju = getSajuInfo(birthday);
+        const saju = getSajuInfo(m.birthDate); // DB 필드명 birthDate 사용
         return {
           ...m,
           ilju: saju.ilju,
@@ -187,7 +190,7 @@ export default function DynamicGroupDetail({ serverRoomName, roomId }) {
         </div>
 
         {!groupData ? (
-          <div className="flex-1 flex items-center justify-center font-black text-slate-300">데이터를 분석하는 중...</div>
+          <div className="flex-1 flex items-center justify-center font-black text-slate-300 animate-pulse">데이터를 분석하는 중...</div>
         ) : (
           <main className="flex-1 flex flex-col items-center">
             <div className="text-center mt-8 mb-8">
